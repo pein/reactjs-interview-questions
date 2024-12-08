@@ -329,8 +329,9 @@ Hide/Show table of contents
 | 266 | [How do you compare useState and useReducer?](#how-do-you-compare-use-state-and-use-reducer)                                                                                                                                     |
 | 267 | [How does context works using useContext hook?](#how-does-context-works-using-use-context-hook)                                                                                                                                  |
 | 268 | [What are the use cases of useContext hook?](#what-are-the-use-cases-of-use-context-hook)                                                                                                                                        |
-| 269 | [When to use client and server components?](#when-to-use-client-and-server-components)                                                                                                                                        |
-| 270 | [What are the differences between page router and app router in nextjs?](#what-are-the-differences-between-page-router-and-app-router-in-nextjs)                                                                                                                                        |
+| 269 | [When to use client and server components?](#when-to-use-client-and-server-components)                                                                                                                                           |
+| 270 | [What are the differences between page router and app router in nextjs?](#what-are-the-differences-between-page-router-and-app-router-in-nextjs)                                                                                 |
+
 </details>
 
 ### Table of Contents
@@ -443,8 +444,6 @@ Hide/Show table of contents
 
     React was created by [Jordan Walke](https://github.com/jordwalke), a software engineer working for Facebook. React was first deployed on Facebook's News Feed in 2011 and on Instagram in 2012.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 2.  ### What is the history behind React evolution?
 
     The history of ReactJS started in 2010 with the creation of **XHP**. XHP is a PHP extension which improved the syntax of the language such that XML document fragments become valid PHP expressions and the primary purpose was used to create custom and reusable HTML elements.
@@ -455,8 +454,6 @@ Hide/Show table of contents
 
     **Note:** JSX comes from the idea of XHP
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 3.  ### What are the major features of React?
 
     The major features of React are:
@@ -466,8 +463,6 @@ Hide/Show table of contents
     - Supports **server-side rendering** which is useful for Search Engine Optimizations(SEO).
     - Follows **Unidirectional or one-way** data flow or data binding.
     - Uses **reusable/composable** UI components to develop the view.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 4.  ### What is JSX?
 
@@ -510,8 +505,6 @@ Hide/Show table of contents
      </details>
 
     **Note:** JSX is stricter than HTML
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 5.  ### What is the difference between Element and Component?
 
@@ -564,8 +557,6 @@ Hide/Show table of contents
       );
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 6.  ### How to create components in React?
 
     Components are the building blocks of creating User Interfaces(UI) in React. There are two possible ways to create a component.
@@ -587,8 +578,6 @@ Hide/Show table of contents
          }
        }
        ```
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 7.  ### When to use a Class Component over a Function Component?
 
@@ -626,8 +615,6 @@ Hide/Show table of contents
       <ExampleApplication />
     </ErrorBoundary>;
     ```
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 8.  ### What are Pure Components?
 
@@ -679,8 +666,6 @@ Hide/Show table of contents
     In class components, the components extending _`React.PureComponent`_ instead of _`React.Component`_ become the pure components. When props or state changes, _PureComponent_ will do a shallow comparison on both props and state by invoking `shouldComponentUpdate()` lifecycle method.
 
     **Note:** `React.memo()` is a higher-order component.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 9.  ### What is state in React?
 
@@ -734,8 +719,6 @@ Hide/Show table of contents
     </details>
 
     State is similar to props, but it is private and fully controlled by the component ,i.e., it is not accessible to any other component till the owner component decides to pass it.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 10. ### What are props in React?
 
@@ -844,8 +827,6 @@ class ParentComponent extends React.Component {
 
     On the otherhand, `props` (short for "properties") are passed to a component by its parent component and are `read-only`, meaning that they cannot be modified by the own component itself. i.e, props acts as arguments for a function. Also, props can be used to configure the behavior of a component and to pass data between components. The components become reusable with the usage of props.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 12. ### What is the difference between HTML and React event handling?
 
     Below are some of the main differences between HTML and React event handling,
@@ -883,8 +864,6 @@ class ParentComponent extends React.Component {
     3. In HTML, you need to invoke the function by appending `()`
        Whereas in react you should not append `()` with the function name. (refer "activateLasers" function in the first point for example)
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 13. ### What are synthetic events in React?
 
     `SyntheticEvent` is a cross-browser wrapper around the browser's native event. Its API is same as the browser's native event, including `stopPropagation()` and `preventDefault()`, except the events work identically across all browsers. The native events can be accessed directly from synthetic events using `nativeEvent` attribute.
@@ -906,8 +885,6 @@ class ParentComponent extends React.Component {
     }
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 14. ### What are inline conditional expressions?
 
     You can use either _if statements_ or _ternary expressions_ which are available from JS to conditionally render expressions. Apart from these approaches, you can also embed any expressions in JSX by wrapping them in curly braces and then followed by JS logical operator `&&`.
@@ -922,8 +899,6 @@ class ParentComponent extends React.Component {
       );
     }
     ```
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 15. ### What is "key" prop and what is the benefit of using it in arrays of elements?
 
@@ -951,13 +926,9 @@ class ParentComponent extends React.Component {
     4. The key attribute accepts either string or number and internally convert it as string type.
     5. Don't generate the key on the fly something like `key={Math.random()}`. Because the keys will never match up between re-renders and DOM created everytime.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 16. ### What is Virtual DOM?
 
     The _Virtual DOM_ (VDOM) is an in-memory representation of _Real DOM_. The representation of a UI is kept in memory and synced with the "real" DOM. It's a step that happens between the render function being called and the displaying of elements on the screen. This entire process is called _reconciliation_.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 17. ### How Virtual DOM works?
 
@@ -975,19 +946,13 @@ class ParentComponent extends React.Component {
 
        ![vdom3](images/vdom3.png)
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 18. ### What is the difference between Shadow DOM and Virtual DOM?
 
     The _Shadow DOM_ is a browser technology designed primarily for scoping variables and CSS in _web components_. The _Virtual DOM_ is a concept implemented by libraries in JavaScript on top of browser APIs.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 19. ### What is React Fiber?
 
     Fiber is the new _reconciliation_ engine or reimplementation of core algorithm in React v16. The goal of React Fiber is to increase its suitability for areas like animation, layout, gestures, ability to pause, abort, or reuse work and assign priority to different types of updates; and new concurrency primitives.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 20. ### What is the main goal of React Fiber?
 
@@ -1002,8 +967,6 @@ class ParentComponent extends React.Component {
     3. Ability to yield back and forth between parents and children to support layout in React.
     4. Ability to return multiple elements from render().
     5. Better support for error boundaries.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 21. ### What are controlled components?
 
@@ -1038,8 +1001,6 @@ class ParentComponent extends React.Component {
       );
     }
     ```
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 22. ### What are uncontrolled components?
 
@@ -1111,19 +1072,13 @@ class ParentComponent extends React.Component {
     </p>
     </details>
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 23. ### What is the difference between createElement and cloneElement?
 
     JSX elements will be transpiled to `React.createElement()` functions to create React elements which are going to be used for the object representation of UI. Whereas `cloneElement` is used to clone an element and pass it new props.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 24. ### What is Lifting State Up in React?
 
     When several components need to share the same changing data then it is recommended to _lift the shared state up_ to their closest common ancestor. That means if two child components share the same data from its parent, then move the state to parent instead of maintaining local state in both of the child components.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 25. ### What are Higher-Order Components?
 
@@ -1141,8 +1096,6 @@ class ParentComponent extends React.Component {
     2. Render hijacking.
     3. State abstraction and manipulation.
     4. Props manipulation.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 26. ### What is children prop?
 
@@ -1193,8 +1146,6 @@ class ParentComponent extends React.Component {
 
     **Note:** There are several methods available in the legacy React API to work with this prop. These include `React.Children.map`, `React.Children.forEach`, `React.Children.count`, `React.Children.only`, `React.Children.toArray`.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 27. ### How to write comments in React?
 
     The comments in React/JSX are similar to JavaScript Multiline comments but are wrapped in curly braces.
@@ -1218,15 +1169,11 @@ class ParentComponent extends React.Component {
     </div>
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 28. ### What is reconciliation?
 
     `Reconciliation` is the process through which React updates the Browser DOM and makes React work faster. React use a `diffing algorithm` so that component updates are predictable and faster. React would first calculate the difference between the `real DOM` and the copy of DOM `(Virtual DOM)` when there's an update of components.
     React stores a copy of Browser DOM which is called `Virtual DOM`. When we make changes or add data, React creates a new Virtual DOM and compares it with the previous one. This comparison is done by `Diffing Algorithm`.
     Now React compares the Virtual DOM with Real DOM. It finds out the changed nodes and updates only the changed nodes in Real DOM leaving the rest nodes as it is. This process is called _Reconciliation_.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 29. ### Does the lazy function support named exports?
 
@@ -1253,8 +1200,6 @@ class ParentComponent extends React.Component {
     const SomeComponent = lazy(() => import("./IntermediateComponent.js"));
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 30. ### Why React uses `className` over `class` attribute?
 
     The attribute names written in JSX turned into keys of JavaScript objects and the JavaScript names cannot contain dashes or reserved words, it is recommended to use camelCase wherever applicable in JSX code. The attribute `class` is a keyword in JavaScript, and JSX is an extension of JavaScript. That's the principle reason why React uses `className` instead of `class`. Pass a string as the `className` prop.
@@ -1264,8 +1209,6 @@ class ParentComponent extends React.Component {
       return <span className="menu navigation-menu">{'Menu'}</span>
     }
     ```
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 31. ### What are fragments?
 
@@ -1314,8 +1257,6 @@ class ParentComponent extends React.Component {
     }
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 32. ### Why fragments are better than container divs?
 
     Below are the list of reasons to prefer fragments over container DOM elements,
@@ -1323,8 +1264,6 @@ class ParentComponent extends React.Component {
     1. Fragments are a bit faster and use less memory by not creating an extra DOM node. This only has a real benefit on very large and deep trees.
     2. Some CSS mechanisms like _Flexbox_ and _CSS Grid_ have a special parent-child relationships, and adding divs in the middle makes it hard to keep the desired layout.
     3. The DOM Inspector is less cluttered.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 33. ### What are portals in React?
 
@@ -1337,13 +1276,9 @@ class ParentComponent extends React.Component {
 
     The first argument is any render-able React child, such as an element, string, or fragment. The second argument is a DOM element.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 34. ### What are stateless components?
 
     If the behaviour of a component is independent of its state then it can be a stateless component. You can use either a function or a class for creating stateless components. But unless you need to use a lifecycle hook in your components, you should go for function components. There are a lot of benefits if you decide to use function components here; they are easy to write, understand, and test, a little faster, and you can avoid the `this` keyword altogether.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 35. ### What are stateful components?
 
@@ -1395,8 +1330,6 @@ class ParentComponent extends React.Component {
 
     </p>
     </details>
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 36. ### How to apply validation on props in React?
 
@@ -1461,8 +1394,6 @@ class ParentComponent extends React.Component {
     };
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 37. ### What are the advantages of React?
 
     Below are the list of main advantages of React,
@@ -1472,8 +1403,6 @@ class ParentComponent extends React.Component {
     3. It renders both on client and server side (_SSR_).
     4. Easy to integrate with frameworks (Angular, Backbone) since it is only a view library.
     5. Easy to write unit and integration tests with tools such as Jest.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 38. ### What are the limitations of React?
 
@@ -1485,13 +1414,9 @@ class ParentComponent extends React.Component {
     4. The code complexity increases with inline templating and JSX.
     5. Too many smaller components leading to over engineering or boilerplate.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 39. ### What are the recommended ways for static type checking?
 
     Normally we use _PropTypes library_ (`React.PropTypes` moved to a `prop-types` package since React v15.5) for _type checking_ in the React applications. For large code bases, it is recommended to use _static type checkers_ such as Flow or TypeScript, that perform type checking at compile time and provide auto-completion features.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 40. ### What is the use of `react-dom` package?
 
@@ -1502,8 +1427,6 @@ class ParentComponent extends React.Component {
     3. `unmountComponentAtNode()`
     4. `findDOMNode()`
     5. `createPortal()`
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 41. ### What is ReactDOMServer?
 
@@ -1530,8 +1453,6 @@ class ParentComponent extends React.Component {
     });
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 42. ### How to use innerHTML in React?
 
     The `dangerouslySetInnerHTML` attribute is React's replacement for using `innerHTML` in the browser DOM. Just like `innerHTML`, it is risky to use this attribute considering cross-site scripting (XSS) attacks. You just need to pass a `__html` object as key and HTML text as value.
@@ -1547,8 +1468,6 @@ class ParentComponent extends React.Component {
       return <div dangerouslySetInnerHTML={createMarkup()} />;
     }
     ```
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 43. ### How to use styles in React?
 
@@ -1567,16 +1486,12 @@ class ParentComponent extends React.Component {
 
     Style keys are camelCased in order to be consistent with accessing the properties on DOM nodes in JavaScript (e.g. `node.style.backgroundImage`).
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 44. ### How events are different in React?
 
     Handling events in React elements has some syntactic differences:
 
     1. React event handlers are named using camelCase, rather than lowercase.
     2. With JSX you pass a function as the event handler, rather than a string.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 45. ### What is the impact of indexes as keys?
 
@@ -1599,8 +1514,6 @@ class ParentComponent extends React.Component {
     ```
 
     **Note:** If you don't specify `key` prop at all, React will use index as a key's value while iterating over an array of data.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 46. ### How do you conditionally render components?
 
@@ -1626,8 +1539,6 @@ class ParentComponent extends React.Component {
     );
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 47. ### Why we need to be careful when spreading props on DOM elements?
 
     When we _spread props_ we run into the risk of adding unknown HTML attributes, which is a bad practice. Instead we can use prop destructuring with `...rest` operator, so it will add only required props.
@@ -1643,8 +1554,6 @@ class ParentComponent extends React.Component {
       <div {...domProps}>{"ComponentB"}</div>
     );
     ```
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 48. ### How do you memoize a component?
 
@@ -1676,8 +1585,6 @@ class ParentComponent extends React.Component {
     export default React.memo(MyFunctionComponent);
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 49. ### How you implement Server Side Rendering or SSR?
 
     React is already equipped to handle rendering on Node servers. A special version of the DOM renderer is available, which follows the same pattern as on the client side.
@@ -1691,19 +1598,13 @@ class ParentComponent extends React.Component {
 
     This method will output the regular HTML as a string, which can be then placed inside a page body as part of the server response. On the client side, React detects the pre-rendered content and seamlessly picks up where it left off.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 50. ### How to enable production mode in React?
 
     You should use Webpack's `DefinePlugin` method to set `NODE_ENV` to `production`, by which it strip out things like propType validation and extra warnings. Apart from this, if you minify the code, for example, Uglify's dead-code elimination to strip out development only code and comments, it will drastically reduce the size of your bundle.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 51. ### Do Hooks replace render props and higher order components?
 
     Both render props and higher-order components render only a single child but in most of the cases Hooks are a simpler way to serve this by reducing nesting in your tree.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 52. ### What is a switching component?
 
@@ -1736,8 +1637,6 @@ class ParentComponent extends React.Component {
     };
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 53. ### What are React Mixins?
 
     _Mixins_ are a way to totally separate components to have a common functionality. Mixins **should not be used** and can be replaced with _higher-order components_ or _decorators_.
@@ -1755,8 +1654,6 @@ class ParentComponent extends React.Component {
 
      <!-- TODO: mixins are deprecated -->
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 54. ### What are the Pointer Events supported in React?
 
     _Pointer Events_ provide a unified way of handling all input events. In the old days we had a mouse and respective event listeners to handle them but nowadays we have many devices which don't correlate to having a mouse, like phones with touch surface or pens. We need to remember that these events will only work in browsers that support the _Pointer Events_ specification.
@@ -1773,8 +1670,6 @@ class ParentComponent extends React.Component {
     8. `onPointerLeave`
     9. `onPointerOver`
     10. `onPointerOut`
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 55. ### Why should component names start with capital letter?
 
@@ -1804,8 +1699,6 @@ class ParentComponent extends React.Component {
     import MyComponent from "./myComponent";
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 56. ### Are custom DOM attributes supported in React v16?
 
     Yes. In the past, React used to ignore unknown DOM attributes. If you wrote JSX with an attribute that React doesn't recognize, React would just skip it.
@@ -1829,8 +1722,6 @@ class ParentComponent extends React.Component {
     ```
 
     This is useful for supplying browser-specific non-standard attributes, trying new DOM APIs, and integrating with opinionated third-party libraries.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 57. ### How to loop inside JSX?
 
@@ -1858,8 +1749,6 @@ class ParentComponent extends React.Component {
 
     This is because JSX tags are transpiled into _function calls_, and you can't use statements inside expressions. This may change thanks to `do` expressions which are _stage 1 proposal_.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 58. ### How do you access props in attribute quotes?
 
     React (or JSX) doesn't support variable interpolation inside an attribute value. The below representation won't work:
@@ -1880,8 +1769,6 @@ class ParentComponent extends React.Component {
     <img className="image" src={`images/${this.props.image}`} />
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 59. ### What is React proptype array with shape?
 
     If you want to pass an array of objects to a component with a particular shape then use `React.PropTypes.shape()` as an argument to `React.PropTypes.arrayOf()`.
@@ -1896,8 +1783,6 @@ class ParentComponent extends React.Component {
       ).isRequired,
     };
     ```
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 60. ### How to conditionally apply class attributes?
 
@@ -1919,21 +1804,15 @@ class ParentComponent extends React.Component {
     <div className={`btn-panel ${this.props.visible ? 'show' : 'hidden'}`}>
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 61. ### What is the difference between React and ReactDOM?
 
     The `react` package contains `React.createElement()`, `React.Component`, `React.Children`, and other helpers related to elements and component classes. You can think of these as the isomorphic or universal helpers that you need to build components. The `react-dom` package contains `ReactDOM.render()`, and in `react-dom/server` we have _server-side rendering_ support with `ReactDOMServer.renderToString()` and `ReactDOMServer.renderToStaticMarkup()`.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 62. ### Why ReactDOM is separated from React?
 
     The React team worked on extracting all DOM-related features into a separate library called _ReactDOM_. React v0.14 is the first release in which the libraries are split. By looking at some of the packages, `react-native`, `react-art`, `react-canvas`, and `react-three`, it has become clear that the beauty and essence of React has nothing to do with browsers or the DOM.
 
     To build more environments that React can render to, React team planned to split the main React package into two: `react` and `react-dom`. This paves the way to writing components that can be shared between the web version of React and React Native.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 63. ### How to use React label element?
 
@@ -1950,8 +1829,6 @@ class ParentComponent extends React.Component {
     <label htmlFor={'user'}>{'User'}</label>
     <input type={'text'} id={'user'} />
     ```
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 64. ### How to combine multiple inline style objects?
 
@@ -1970,8 +1847,6 @@ class ParentComponent extends React.Component {
       {"Submit"}
     </button>
     ```
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 65. ### How to re-render the view when the browser is resized?
 
@@ -2236,8 +2111,6 @@ class ParentComponent extends React.Component {
               )
         }
     ```
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 74. ### Is it possible to use async/await in plain React?
 
@@ -2695,29 +2568,27 @@ class ParentComponent extends React.Component {
 
 95. ### How to format date using React Intl?
 
-     The `injectIntl()` higher-order component will give you access to the `formatDate()` method via the props in your component. The method is used internally by instances of `FormattedDate` and it returns the string representation of the formatted date.
+    The `injectIntl()` higher-order component will give you access to the `formatDate()` method via the props in your component. The method is used internally by instances of `FormattedDate` and it returns the string representation of the formatted date.
 
-     ```jsx harmony
-     import { injectIntl, intlShape } from "react-intl";
+    ```jsx harmony
+    import { injectIntl, intlShape } from "react-intl";
 
-     const stringDate = this.props.intl.formatDate(date, {
-       year: "numeric",
-       month: "numeric",
-       day: "numeric",
-     });
+    const stringDate = this.props.intl.formatDate(date, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    });
 
-     const MyComponent = ({ intl }) => (
-       <div>{`The formatted date is ${stringDate}`}</div>
-     );
+    const MyComponent = ({ intl }) => (
+      <div>{`The formatted date is ${stringDate}`}</div>
+    );
 
-     MyComponent.propTypes = {
-       intl: intlShape.isRequired,
-     };
+    MyComponent.propTypes = {
+      intl: intlShape.isRequired,
+    };
 
-     export default injectIntl(MyComponent);
-     ```
-
-    **[⬆ Back to Top](#table-of-contents)**
+    export default injectIntl(MyComponent);
+    ```
 
 ## React Testing
 
@@ -4097,31 +3968,31 @@ class ParentComponent extends React.Component {
   <details><summary><b>See Class</b></summary>
     <p>
 
-  ```javascript
-    import React, { Component } from "react";
+```javascript
+import React, { Component } from "react";
 
-     class App extends Component {
-       handleClick = () => {
-         import("./moduleA")
-           .then(({ moduleA }) => {
-             // Use moduleA
-           })
-           .catch((err) => {
-             // Handle failure
-           });
-       };
+class App extends Component {
+  handleClick = () => {
+    import("./moduleA")
+      .then(({ moduleA }) => {
+        // Use moduleA
+      })
+      .catch((err) => {
+        // Handle failure
+      });
+  };
 
-       render() {
-         return (
-           <div>
-             <button onClick={this.handleClick}>Load</button>
-           </div>
-         );
-       }
-     }
+  render() {
+    return (
+      <div>
+        <button onClick={this.handleClick}>Load</button>
+      </div>
+    );
+  }
+}
 
-     export default App;
-  ```
+export default App;
+```
 
   </p>
 </details>
@@ -4784,8 +4655,6 @@ class ParentComponent extends React.Component {
      const [user, setUser] = useState("userProfile");
      ```
 
-     **[⬆ Back to Top](#table-of-contents)**
-
 221. ### What are the sources used for introducing hooks?
 
      Hooks got the ideas from several different sources. Below are some of them,
@@ -4977,8 +4846,6 @@ class ParentComponent extends React.Component {
      2. Use of interfaces for complex type definitions
      3. IDEs such as VS Code was made for TypeScript
      4. Avoid bugs with the ease of readability and Validation
-
-     **[⬆ Back to Top](#table-of-contents)**
 
 236. ### How do you make sure that user remains authenticated on page refresh while using Context API State Management?
 
@@ -5260,14 +5127,14 @@ class ParentComponent extends React.Component {
              <button
                onClick={() => {
                  this.updateMessage();
-               }}>
+               }}
+             >
                Click!!
              </button>
            </>
          );
        }
      }
-
      ```
 
      You didn't use state in functional components because it was only supported in class components. But over the years hooks have been implemented in functional components which enables to use state too.
@@ -5372,8 +5239,6 @@ class ParentComponent extends React.Component {
      In the example above, the _strict mode_ checks apply to `<ComponentOne>` and `<ComponentTwo>` components only. i.e., Part of the application only.
 
      **Note:** Frameworks such as NextJS has this flag enabled by default.
-
-     **[⬆ Back to Top](#table-of-contents)**
 
 246. ### What is the benefit of strict mode?
 
@@ -5828,6 +5693,7 @@ Technically it is possible to write nested function components but it is not sug
 **[⬆ Back to Top](#table-of-contents)**
 
 268. ### What are the use cases of useContext hook?
+
      Some of the common use cases of useContext are listed below,
 
      1. **Theme customizations:** The useContext hook can be used to manage and apply custom themes for an application. That means it allows users to personalize the appearance of the application.
@@ -5840,19 +5706,20 @@ Technically it is possible to write nested function components but it is not sug
 
       You can efficiently build nextjs application if you are aware about which part of the application needs to use client components and which other parts needs to use server components. The common cases of both client and server components are listed below:
 
-        **Client components:**
-        1. Whenever your need to add interactivity and event listeners such as onClick(), onChange(), etc to the pages
-        2. If you need to use State and Lifecycle Effects like useState(), useReducer(), useEffect() etc.
-        3. If there is a requirement to use browser-only APIs.
-        4. If you need to implement custom hooks that depend on state, effects, or browser-only APIs.
-        5. There are React Class components in the pages.
+      **Client components:**
 
-        **Server components:**
-        1. If the component logic is about data fetching.
-        2. If you need to access backend resources directly.
-        3. When you need to keep sensitive information((access tokens, API keys, etc)	) on the server.
-        4. If you want reduce client-side JavaScript and placing large dependencies on the server.
+      1. Whenever your need to add interactivity and event listeners such as onClick(), onChange(), etc to the pages
+      2. If you need to use State and Lifecycle Effects like useState(), useReducer(), useEffect() etc.
+      3. If there is a requirement to use browser-only APIs.
+      4. If you need to implement custom hooks that depend on state, effects, or browser-only APIs.
+      5. There are React Class components in the pages.
 
+      **Server components:**
+
+      1. If the component logic is about data fetching.
+      2. If you need to access backend resources directly.
+      3. When you need to keep sensitive information((access tokens, API keys, etc) ) on the server.
+      4. If you want reduce client-side JavaScript and placing large dependencies on the server.
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -5880,8 +5747,6 @@ Technically it is possible to write nested function components but it is not sug
 
    **Note:** You can directly assign to the state object either in _constructor_ or using latest javascript's class field declaration syntax.
 
-   **[⬆ Back to Top](#table-of-contents)**
-
 2. ### What is the purpose of callback function as an argument of `setState()`?
 
    The callback function is invoked when setState finished and the component gets rendered. Since `setState()` is **asynchronous** the callback function is used for any post action.
@@ -5893,8 +5758,6 @@ Technically it is possible to write nested function components but it is not sug
      console.log("The name has updated and component re-rendered")
    );
    ```
-
-   **[⬆ Back to Top](#table-of-contents)**
 
 3. ### How to bind methods or event handlers in JSX callbacks?
 
@@ -5942,8 +5805,6 @@ Technically it is possible to write nested function components but it is not sug
 
    **Note:** If the callback is passed as prop to child components, those components might do an extra re-rendering. In those cases, it is preferred to go with `.bind()` or _public class fields syntax_ approach considering performance.
 
-   **[⬆ Back to Top](#table-of-contents)**
-
 4. ### How to pass a parameter to an event handler or callback?
 
    You can use an _arrow function_ to wrap around an _event handler_ and pass parameters:
@@ -5967,13 +5828,9 @@ Technically it is possible to write nested function components but it is not sug
    };
    ```
 
-   **[⬆ Back to Top](#table-of-contents)**
-
 5. ### What is the use of refs?
 
    The _ref_ is used to return a reference to the element. They _should be avoided_ in most cases, however, they can be useful when you need a direct access to the DOM element or an instance of a component.
-
-   **[⬆ Back to Top](#table-of-contents)**
 
 6. ### How to create refs?
 
@@ -6022,8 +5879,6 @@ Technically it is possible to write nested function components but it is not sug
    You can also use _refs_ in function components using **closures**.
    **Note**: You can also use inline ref callbacks even though it is not a recommended approach.
 
-   **[⬆ Back to Top](#table-of-contents)**
-
 7. ### What are forward refs?
 
    _Ref forwarding_ is a feature that lets some components take a _ref_ they receive, and pass it further down to a child.
@@ -6039,8 +5894,6 @@ Technically it is possible to write nested function components but it is not sug
    const ref = React.createRef();
    <ButtonElement ref={ref}>{"Forward Ref"}</ButtonElement>;
    ```
-
-   **[⬆ Back to Top](#table-of-contents)**
 
 8. ### Which is preferred option with in callback refs and findDOMNode()?
 
@@ -6078,8 +5931,6 @@ Technically it is possible to write nested function components but it is not sug
    }
    ```
 
-   **[⬆ Back to Top](#table-of-contents)**
-
 9. ### Why are String Refs legacy?
 
    If you worked with React before, you might be familiar with an older API where the `ref` attribute is a string, like `ref={'textInput'}`, and the DOM node is accessed as `this.refs.textInput`. We advise against it because _string refs have below issues_, and are considered legacy. String refs were **removed in React v16**.
@@ -6107,8 +5958,6 @@ Technically it is possible to write nested function components but it is not sug
       }
       ```
 
-   **[⬆ Back to Top](#table-of-contents)**
-
 10. ### What are the different phases of component lifecycle?
 
     The component lifecycle has three distinct lifecycle phases:
@@ -6135,8 +5984,6 @@ Technically it is possible to write nested function components but it is not sug
 
     ![phases 16.2](images/phases.png)
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 11. ### What are the lifecycle methods of React?
 
     Before React 16.3
@@ -6157,8 +6004,6 @@ Technically it is possible to write nested function components but it is not sug
     - **getSnapshotBeforeUpdate:** Executed right before rendered output is committed to the DOM. Any value returned by this will be passed into `componentDidUpdate()`. This is useful to capture information from the DOM i.e. scroll position.
     - **componentDidUpdate:** Mostly it is used to update the DOM in response to prop or state changes. This will not fire if `shouldComponentUpdate()` returns `false`.
     - **componentWillUnmount** It will be used to cancel any outgoing network requests, or remove all event listeners associated with the component.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 12. ### How to create props proxy for HOC component?
 
@@ -6181,8 +6026,6 @@ Technically it is possible to write nested function components but it is not sug
     }
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 13. ### What is context?
 
     _Context_ provides a way to pass data through the component tree without having to pass props down manually at every level.
@@ -6192,8 +6035,6 @@ Technically it is possible to write nested function components but it is not sug
     ```javascript
     const { Provider, Consumer } = React.createContext(defaultValue);
     ```
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 14. ### What is the purpose of using super constructor with props argument?
 
@@ -6233,8 +6074,6 @@ Technically it is possible to write nested function components but it is not sug
 
     The above code snippets reveals that `this.props` is different only within the constructor. It would be the same outside the constructor.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 15. ### How to set state with a dynamic key name?
 
     If you are using ES6 or the Babel transpiler to transform your JSX code then you can accomplish this with _computed property names_.
@@ -6244,8 +6083,6 @@ Technically it is possible to write nested function components but it is not sug
       this.setState({ [event.target.id]: event.target.value })
     }
     ```
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 16. ### What would be the common mistake of function being called every time the component renders?
 
@@ -6266,8 +6103,6 @@ Technically it is possible to write nested function components but it is not sug
       return <button onClick={this.handleClick}>{'Click Me'}</button>
     }
     ```
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 17. ### What are error boundaries in React v16?
 
@@ -6310,13 +6145,9 @@ Technically it is possible to write nested function components but it is not sug
     </ErrorBoundary>
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 18. ### How are error boundaries handled in React v15?
 
     React v15 provided very basic support for _error boundaries_ using `unstable_handleError` method. It has been renamed to `componentDidCatch` in React v16.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 19. ### What is the purpose of render method of `react-dom`?
 
@@ -6328,13 +6159,9 @@ Technically it is possible to write nested function components but it is not sug
 
     If the optional callback is provided, it will be executed after the component is rendered or updated.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 20. ### What will happen if you use `setState()` in constructor?
 
     When you use `setState()`, then apart from assigning to the object state React also re-renders the component and all its children. You would get error like this: _Can only update a mounted or mounting component._ So we need to use `this.state` to initialize variables inside constructor.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 21. ### Is it good to use `setState()` in `componentWillMount()` method?
 
@@ -6350,8 +6177,6 @@ Technically it is possible to write nested function components but it is not sug
         })
     }
     ```
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 22. ### What will happen if you use props in initial state?
 
@@ -6394,8 +6219,6 @@ Technically it is possible to write nested function components but it is not sug
     }
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 23. ### How you use decorators in React?
 
     You can _decorate_ your _class_ components, which is the same as passing the component into a function. **Decorators** are flexible and readable way of modifying component functionality.
@@ -6426,8 +6249,6 @@ Technically it is possible to write nested function components but it is not sug
 
     **Note:** Decorators are a feature that didn't make it into ES7, but are currently a _stage 2 proposal_.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 24. ### What is CRA and its benefits?
 
     The `create-react-app` CLI tool allows you to quickly create & run React applications with no configuration step.
@@ -6457,8 +6278,6 @@ Technically it is possible to write nested function components but it is not sug
     5. A live development server that warns about common mistakes.
     6. A build script to bundle JS, CSS, and images for production, with hashes and sourcemaps.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 25. ### What is the lifecycle methods order in mounting?
 
     The lifecycle methods are called in the following order when an instance of a component is being created and inserted into the DOM.
@@ -6467,8 +6286,6 @@ Technically it is possible to write nested function components but it is not sug
     2. `static getDerivedStateFromProps()`
     3. `render()`
     4. `componentDidMount()`
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 26. ### What are the lifecycle methods going to be deprecated in React v16?
 
@@ -6479,8 +6296,6 @@ Technically it is possible to write nested function components but it is not sug
     3. `componentWillUpdate()`
 
     Starting with React v16.3 these methods are aliased with `UNSAFE_` prefix, and the unprefixed version will be removed in React v17.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 27. ### What is the purpose of `getDerivedStateFromProps()` lifecycle method?
 
@@ -6496,8 +6311,6 @@ Technically it is possible to write nested function components but it is not sug
 
     This lifecycle method along with `componentDidUpdate()` covers all the use cases of `componentWillReceiveProps()`.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 28. ### What is the purpose of `getSnapshotBeforeUpdate()` lifecycle method?
 
     The new `getSnapshotBeforeUpdate()` lifecycle method is called right before DOM updates. The return value from this method will be passed as the third parameter to `componentDidUpdate()`.
@@ -6511,8 +6324,6 @@ Technically it is possible to write nested function components but it is not sug
     ```
 
     This lifecycle method along with `componentDidUpdate()` covers all the use cases of `componentWillUpdate()`.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 29. ### What is the recommended way for naming components?
 
@@ -6544,8 +6355,6 @@ Technically it is possible to write nested function components but it is not sug
     export default TodoApp;
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 30. ### What is the recommended ordering of methods in component class?
 
     _Recommended_ ordering of methods from _mounting_ to _render stage_:
@@ -6564,8 +6373,6 @@ Technically it is possible to write nested function components but it is not sug
     12. getter methods for render like `getSelectReason()` or `getFooterContent()`
     13. optional render methods like `renderNavigation()` or `renderProfilePicture()`
     14. `render()`
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 31. ### Why we need to pass a function to setState()?
 
@@ -6614,8 +6421,6 @@ Technically it is possible to write nested function components but it is not sug
     }));
     ```
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 32. ### Why is `isMounted()` an anti-pattern and what is the proper solution?
 
     The primary use case for `isMounted()` is to avoid calling `setState()` after a component has been unmounted, because it will emit a warning.
@@ -6629,8 +6434,6 @@ Technically it is possible to write nested function components but it is not sug
     Checking `isMounted()` before calling `setState()` does eliminate the warning, but it also defeats the purpose of the warning. Using `isMounted()` is a code smell because the only reason you would check is because you think you might be holding a reference after the component has unmounted.
 
     An optimal solution would be to find places where `setState()` might be called after a component has unmounted, and fix them. Such situations most commonly occur due to callbacks, when a component is waiting for some data and gets unmounted before the data arrives. Ideally, any callbacks should be canceled in `componentWillUnmount()`, prior to unmounting.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 33. ### What is the difference between constructor and getInitialState?
 
@@ -6663,8 +6466,6 @@ Technically it is possible to write nested function components but it is not sug
 
     **Note:** `React.createClass()` is deprecated and removed in React v16. Use plain JavaScript classes instead.
 
-    **[⬆ Back to Top](#table-of-contents)**
-
 34. ### Can you force a component to re-render without calling setState?
 
     By default, when your component's state or props change, your component will re-render. If your `render()` method depends on some other data, you can tell React that the component needs re-rendering by calling `forceUpdate()`.
@@ -6674,8 +6475,6 @@ Technically it is possible to write nested function components but it is not sug
     ```
 
     It is recommended to avoid all uses of `forceUpdate()` and only read from `this.props` and `this.state` in `render()`.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 35. ### What is the difference between `super()` and `super(props)` in React using ES6 classes?
 
@@ -6704,8 +6503,6 @@ Technically it is possible to write nested function components but it is not sug
     ```
 
     Outside `constructor()` both will display same value for `this.props`.
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 36. ### What is the difference between `setState()` and `replaceState()` methods?
 
@@ -7151,8 +6948,6 @@ Technically it is possible to write nested function components but it is not sug
          ├─ tsconfig.test.json
          └─ tslint.json
          ```
-
-    **[⬆ Back to Top](#table-of-contents)**
 
 54. ### Does the statics object work with ES6 classes in React?
 
