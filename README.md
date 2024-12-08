@@ -5345,2043 +5345,883 @@ Technically it is possible to write nested function components but it is not sug
 
 270. ### What are the differences between page router and app router in nextjs?
 
-## Old Q&A
+-- ----- ALSO GET DATA FROM THE TS LECTURE NOTES FROM (DAILYCODE + CMS + MY_NOTES)
 
-1.  ### Why should we not update the state directly?
+- TypeScript is JavaScript with added syntax for types.
 
-    If you try to update the state directly then it won't re-render the component.
+- TypeScript uses compile time type checking. Which means it checks if the specified types match before running the code, not while running the code.
 
-    ```javascript
-    //Wrong
-    this.state.message = "Hello world";
-    ```
+- TypeScript is transpiled into JavaScript using a compiler.
 
-    Instead use `setState()` method. It schedules an update to a component's state object. When state changes, the component responds by re-rendering.
+```bash
+# Type Assignment ->
+# 1. Explicit: writing out the type:
+let firstName: string = "Dylan";
 
-    ```javascript
-    //Correct
-    this.setState({ message: "Hello World" });
-    ```
+# 2. Implicit: TypeScript will "guess" the type, based on the assigned value:
+let firstName = "Dylan";
 
-    **Note:** You can directly assign to the state object either in _constructor_ or using latest javascript's class field declaration syntax.
+# Note: Having TypeScript "guess" the type of a value is called infer.
+# TypeScript may not always properly infer what the type of a variable may be. In such cases, it will set the type to any which disables type checking.
+```
 
-2.  ### What is the purpose of callback function as an argument of `setState()`?
+- TypeScript Simple Types
 
-    The callback function is invoked when setState finished and the component gets rendered. Since `setState()` is **asynchronous** the callback function is used for any post action.
+  - There are three main primitives in JavaScript and TypeScript.
+    - boolean - true or false values
+    - number - whole numbers and floating point values
+    - string - text values like "TypeScript Rocks"
+  - There are also 2 less common primitives used in later versions of Javascript and TypeScript.
+    - bigint - whole numbers and floating point values, but allows larger negative and positive numbers than the number type.
+    - symbol are used to create a globally unique identifier.
 
-    **Note:** It is recommended to use lifecycle method rather than this callback function.
+```bash
 
-    ```javascript
-    setState({ name: "John" }, () =>
-      console.log("The name has updated and component re-rendered")
-    );
-    ```
+```
 
-3.  ### How to bind methods or event handlers in JSX callbacks?
+- TypeScript Special Types - [These types don't have much use]
 
-    There are 3 possible ways to achieve this in class components:
+  - any - it disables type checking and effectively allows all types to be used.
 
-    1. **Binding in Constructor:** In JavaScript classes, the methods are not bound by default. The same rule applies for React event handlers defined as class methods. Normally we bind them in constructor.
-
-       ```javascript
-       class User extends Component {
-         constructor(props) {
-           super(props);
-           this.handleClick = this.handleClick.bind(this);
-         }
-         handleClick() {
-           console.log("SingOut triggered");
-         }
-         render() {
-           return <button onClick={this.handleClick}>SingOut</button>;
-         }
-       }
-       ```
-
-    2. **Public class fields syntax:** If you don't like to use bind approach then _public class fields syntax_ can be used to correctly bind callbacks. The Create React App enables this syntax by default.
-
-       ```jsx harmony
-       handleClick = () => {
-         console.log("SingOut triggered", this);
-       };
-       ```
-
-       ```jsx harmony
-       <button onClick={this.handleClick}>SingOut</button>
-       ```
-
-    3. **Arrow functions in callbacks:** It is possible to use _arrow functions_ directly in the callbacks.
-
-       ```jsx harmony
-       handleClick() {
-           console.log('SingOut triggered');
-       }
-       render() {
-           return <button onClick={() => this.handleClick()}>SignOut</button>;
-       }
-       ```
-
-    **Note:** If the callback is passed as prop to child components, those components might do an extra re-rendering. In those cases, it is preferred to go with `.bind()` or _public class fields syntax_ approach considering performance.
-
-4.  ### How to pass a parameter to an event handler or callback?
-
-    You can use an _arrow function_ to wrap around an _event handler_ and pass parameters:
-
-    ```jsx harmony
-    <button onClick={() => this.handleClick(id)} />
-    ```
-
-    This is an equivalent to calling `.bind`:
-
-    ```jsx harmony
-    <button onClick={this.handleClick.bind(this, id)} />
-    ```
-
-    Apart from these two approaches, you can also pass arguments to a function which is defined as arrow function
-
-    ```jsx harmony
-    <button onClick={this.handleClick(id)} />;
-    handleClick = (id) => () => {
-      console.log("Hello, your ticket number is", id);
-    };
-    ```
-
-5.  ### What is the use of refs?
-
-    The _ref_ is used to return a reference to the element. They _should be avoided_ in most cases, however, they can be useful when you need a direct access to the DOM element or an instance of a component.
-
-6.  ### How to create refs?
-
-    There are two approaches
-
-    1. This is a recently added approach. _Refs_ are created using `React.createRef()` method and attached to React elements via the `ref` attribute. In order to use _refs_ throughout the component, just assign the _ref_ to the instance property within constructor.
-
-       ```jsx harmony
-       class MyComponent extends React.Component {
-         constructor(props) {
-           super(props);
-           this.myRef = React.createRef();
-         }
-         render() {
-           return <div ref={this.myRef} />;
-         }
-       }
-       ```
-
-    2. You can also use ref callbacks approach regardless of React version. For example, the search bar component's input element is accessed as follows,
-       ```jsx harmony
-       class SearchBar extends Component {
-         constructor(props) {
-           super(props);
-           this.txtSearch = null;
-           this.state = { term: "" };
-           this.setInputSearchRef = (e) => {
-             this.txtSearch = e;
-           };
-         }
-         onInputChange(event) {
-           this.setState({ term: this.txtSearch.value });
-         }
-         render() {
-           return (
-             <input
-               value={this.state.term}
-               onChange={this.onInputChange.bind(this)}
-               ref={this.setInputSearchRef}
-             />
-           );
-         }
-       }
-       ```
-
-    You can also use _refs_ in function components using **closures**.
-    **Note**: You can also use inline ref callbacks even though it is not a recommended approach.
-
-7.  ### What are forward refs?
-
-    _Ref forwarding_ is a feature that lets some components take a _ref_ they receive, and pass it further down to a child.
+    - any can be a useful way to get past errors since it disables type checking, but TypeScript will not be able to provide type safety, and tools which rely on type data, such as auto completion, will not work. Remember, it should be avoided at "any" cost...
 
-    ```jsx harmony
-    const ButtonElement = React.forwardRef((props, ref) => (
-      <button ref={ref} className="CustomButton">
-        {props.children}
-      </button>
-    ));
+  - unknown - it is a similar, but safer alternative to any.
 
-    // Create ref to the DOM button:
-    const ref = React.createRef();
-    <ButtonElement ref={ref}>{"Forward Ref"}</ButtonElement>;
-    ```
+    - unknown is best used when you don't know the type of data being typed. To add a type later, you'll need to cast it. Casting is when we use the "as" keyword to say property or variable is of the casted type.
 
-8.  ### Which is preferred option with in callback refs and findDOMNode()?
+  - never - it effectively throws an error whenever it is defined.
 
-    It is preferred to use _callback refs_ over `findDOMNode()` API. Because `findDOMNode()` prevents certain improvements in React in the future.
+    - never is rarely used, especially by itself, its primary use is in advanced generics.
 
-    The **legacy** approach of using `findDOMNode`:
+  - undefined & null - undefined and null are types that refer to the JavaScript primitives undefined and null respectively.
 
-    ```javascript
-    class MyComponent extends Component {
-      componentDidMount() {
-        findDOMNode(this).scrollIntoView();
-      }
+```bash
+let y: undefined = undefined;
+let z: null = null;
 
-      render() {
-        return <div />;
-      }
-    }
-    ```
+```
 
-    The recommended approach is:
+- TypeScript Arrays
 
-    ```javascript
-    class MyComponent extends Component {
-      constructor(props) {
-        super(props);
-        this.node = createRef();
-      }
-      componentDidMount() {
-        this.node.current.scrollIntoView();
-      }
-
-      render() {
-        return <div ref={this.node} />;
-      }
-    }
-    ```
+```bash
+const names: string[] = [];
+names.push("Dylan"); # no error
 
-9.  ### Why are String Refs legacy?
+# The readonly keyword can prevent arrays from being changed.
+const names: readonly string[] = ["Dylan"];
+names.push("Jack"); # Error: Property 'push' does not exist on type 'readonly string[]'.
 
-    If you worked with React before, you might be familiar with an older API where the `ref` attribute is a string, like `ref={'textInput'}`, and the DOM node is accessed as `this.refs.textInput`. We advise against it because _string refs have below issues_, and are considered legacy. String refs were **removed in React v16**.
+# TypeScript can infer the type of an array if it has values.
+const numbers = [1, 2, 3]; # inferred to type number[]
+const numbers = [1, 2, 3, "a"]; # inferred to type (string | number)[]
 
-    1. They _force React to keep track of currently executing component_. This is problematic because it makes react module stateful, and thus causes weird errors when react module is duplicated in the bundle.
-    2. They are _not composable_ — if a library puts a ref on the passed child, the user can't put another ref on it. Callback refs are perfectly composable.
-    3. They _don't work with static analysis_ like Flow. Flow can't guess the magic that framework does to make the string ref appear on `this.refs`, as well as its type (which could be different). Callback refs are friendlier to static analysis.
-    4. It doesn't work as most people would expect with the "render callback" pattern (e.g. <DataGrid renderRow={this.renderRow} />)
+numbers.push(4); # no error
 
-       ```jsx harmony
-       class MyComponent extends Component {
-         renderRow = (index) => {
-           // This won't work. Ref will get attached to DataTable rather than MyComponent:
-           return <input ref={"input-" + index} />;
+```
 
-           // This would work though! Callback refs are awesome.
-           return <input ref={(input) => (this["input-" + index] = input)} />;
-         };
+- TypeScript Tuples
+  - A tuple is a typed array with a pre-defined length and types for each index.
 
-         render() {
-           return (
-             <DataTable data={this.props.data} renderRow={this.renderRow} />
-           );
-         }
-       }
-       ```
+```bash
+# define our tuple
+let ourTuple: [number, boolean, string]; # CONST WILL GIVE ERROR FOR TUPLES [USE LET ONLY]
 
-10. ### What are the different phases of component lifecycle?
+ourTuple = [5, false, 'Coding']; # initialize correctly
+ourTuple = [false, 'Coding God was mistaken', 5]; # wrong order will also gives error
+console.log(ourTuple[0]); # To access 1st element
 
-    The component lifecycle has three distinct lifecycle phases:
+const ourTuple: [string, number] = ["s", 2,2,4]; # YOU CAN WRITE ANY TYPE AFTER THIS SO CREATE READONLY TUPLES --NO IT IS GIVING ERROR
 
-    1. **Mounting:** The component is ready to mount in the browser DOM. This phase covers initialization from `constructor()`, `getDerivedStateFromProps()`, `render()`, and `componentDidMount()` lifecycle methods.
+# READONLY TUPLES
+# define our readonly tuple - YOU CANNOT CHANGE IT LATER
+const ourReadonlyTuple: readonly [number, boolean, string] = [5, true, 'Coding'];
 
-    2. **Updating:** In this phase, the component gets updated in two ways, sending the new props and updating the state either from `setState()` or `forceUpdate()`. This phase covers `getDerivedStateFromProps()`, `shouldComponentUpdate()`, `render()`, `getSnapshotBeforeUpdate()` and `componentDidUpdate()` lifecycle methods.
+# useState in react returns a tuple of the value and a setter function. It's a example of tuple : const [firstName, setFirstName] = useState('Dylan')
 
-    3. **Unmounting:** In this last phase, the component is not needed and gets unmounted from the browser DOM. This phase includes `componentWillUnmount()` lifecycle method.
+# NAMED TUPLES ::
+# you can access elements by their names, making the code more readable.
+const ourTuple: [letter: string, digit: number] = ["s", 2];
 
-    It's worth mentioning that React internally has a concept of phases when applying changes to the DOM. They are separated as follows
-
-    1. **Render** The component will render without any side effects. This applies to Pure components and in this phase, React can pause, abort, or restart the render.
-
-    2. **Pre-commit** Before the component actually applies the changes to the DOM, there is a moment that allows React to read from the DOM through the `getSnapshotBeforeUpdate()`.
-
-    3. **Commit** React works with the DOM and executes the final lifecycles respectively `componentDidMount()` for mounting, `componentDidUpdate()` for updating, and `componentWillUnmount()` for unmounting.
-
-    React 16.3+ Phases (or an [interactive version](http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/))
-
-    ![phases 16.4+](images/phases16.4.png)
-
-    Before React 16.3
-
-    ![phases 16.2](images/phases.png)
-
-11. ### What are the lifecycle methods of React?
-
-    Before React 16.3
-
-    - **componentWillMount:** Executed before rendering and is used for App level configuration in your root component.
-    - **componentDidMount:** Executed after first rendering and here all AJAX requests, DOM or state updates, and set up event listeners should occur.
-    - **componentWillReceiveProps:** Executed when particular prop updates to trigger state transitions.
-    - **shouldComponentUpdate:** Determines if the component will be updated or not. By default it returns `true`. If you are sure that the component doesn't need to render after state or props are updated, you can return false value. It is a great place to improve performance as it allows you to prevent a re-render if component receives new prop.
-    - **componentWillUpdate:** Executed before re-rendering the component when there are props & state changes confirmed by `shouldComponentUpdate()` which returns true.
-    - **componentDidUpdate:** Mostly it is used to update the DOM in response to prop or state changes.
-    - **componentWillUnmount:** It will be used to cancel any outgoing network requests, or remove all event listeners associated with the component.
-
-    React 16.3+
-
-    - **getDerivedStateFromProps:** Invoked right before calling `render()` and is invoked on _every_ render. This exists for rare use cases where you need a derived state. Worth reading [if you need derived state](https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html).
-    - **componentDidMount:** Executed after first rendering and where all AJAX requests, DOM or state updates, and set up event listeners should occur.
-    - **shouldComponentUpdate:** Determines if the component will be updated or not. By default, it returns `true`. If you are sure that the component doesn't need to render after the state or props are updated, you can return a false value. It is a great place to improve performance as it allows you to prevent a re-render if component receives a new prop.
-    - **getSnapshotBeforeUpdate:** Executed right before rendered output is committed to the DOM. Any value returned by this will be passed into `componentDidUpdate()`. This is useful to capture information from the DOM i.e. scroll position.
-    - **componentDidUpdate:** Mostly it is used to update the DOM in response to prop or state changes. This will not fire if `shouldComponentUpdate()` returns `false`.
-    - **componentWillUnmount** It will be used to cancel any outgoing network requests, or remove all event listeners associated with the component.
-
-12. ### How to create props proxy for HOC component?
-
-    You can add/edit props passed to the component using _props proxy_ pattern like this:
-
-    ```jsx harmony
-    function HOC(WrappedComponent) {
-      return class Test extends Component {
-        render() {
-          const newProps = {
-            title: "New Header",
-            footer: false,
-            showFeatureX: false,
-            showFeatureY: true,
-          };
-
-          return <WrappedComponent {...this.props} {...newProps} />;
-        }
-      };
-    }
-    ```
-
-13. ### What is context?
-
-    _Context_ provides a way to pass data through the component tree without having to pass props down manually at every level.
-
-    For example, authenticated users, locale preferences, UI themes need to be accessed in the application by many components.
-
-    ```javascript
-    const { Provider, Consumer } = React.createContext(defaultValue);
-    ```
-
-14. ### What is the purpose of using super constructor with props argument?
-
-    A child class constructor cannot make use of `this` reference until the `super()` method has been called. The same applies to ES6 sub-classes as well. The main reason for passing props parameter to `super()` call is to access `this.props` in your child constructors.
-
-    **Passing props:**
-
-    ```javascript
-    class MyComponent extends React.Component {
-      constructor(props) {
-        super(props);
-
-        console.log(this.props); // prints { name: 'John', age: 42 }
-      }
-    }
-    ```
-
-    **Not passing props:**
-
-    ```javascript
-    class MyComponent extends React.Component {
-      constructor(props) {
-        super();
-
-        console.log(this.props); // prints undefined
-
-        // but props parameter is still available
-        console.log(props); // prints { name: 'John', age: 42 }
-      }
-
-      render() {
-        // no difference outside constructor
-        console.log(this.props); // prints { name: 'John', age: 42 }
-      }
-    }
-    ```
-
-    The above code snippets reveals that `this.props` is different only within the constructor. It would be the same outside the constructor.
-
-15. ### How to set state with a dynamic key name?
-
-    If you are using ES6 or the Babel transpiler to transform your JSX code then you can accomplish this with _computed property names_.
-
-    ```javascript
-    handleInputChange(event) {
-      this.setState({ [event.target.id]: event.target.value })
-    }
-    ```
-
-16. ### What would be the common mistake of function being called every time the component renders?
-
-    You need to make sure that function is not being called while passing the function as a parameter.
-
-    ```jsx harmony
-    render() {
-      // Wrong: handleClick is called instead of passed as a reference!
-      return <button onClick={this.handleClick()}>{'Click Me'}</button>
-    }
-    ```
-
-    Instead, pass the function itself without parenthesis:
-
-    ```jsx harmony
-    render() {
-      // Correct: handleClick is passed as a reference!
-      return <button onClick={this.handleClick}>{'Click Me'}</button>
-    }
-    ```
-
-17. ### What are error boundaries in React v16?
-
-    _Error boundaries_ are components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed.
-
-    A class component becomes an error boundary if it defines a new lifecycle method called `componentDidCatch(error, info)` or `static getDerivedStateFromError() `:
-
-    ```jsx harmony
-    class ErrorBoundary extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = { hasError: false };
-      }
-
-      componentDidCatch(error, info) {
-        // You can also log the error to an error reporting service
-        logErrorToMyService(error, info);
-      }
-
-      static getDerivedStateFromError(error) {
-        // Update state so the next render will show the fallback UI.
-        return { hasError: true };
-      }
-
-      render() {
-        if (this.state.hasError) {
-          // You can render any custom fallback UI
-          return <h1>{"Something went wrong."}</h1>;
-        }
-        return this.props.children;
-      }
-    }
-    ```
-
-    After that use it as a regular component:
-
-    ```jsx harmony
-    <ErrorBoundary>
-      <MyWidget />
-    </ErrorBoundary>
-    ```
-
-18. ### How are error boundaries handled in React v15?
-
-    React v15 provided very basic support for _error boundaries_ using `unstable_handleError` method. It has been renamed to `componentDidCatch` in React v16.
-
-19. ### What is the purpose of render method of `react-dom`?
-
-    This method is used to render a React element into the DOM in the supplied container and return a reference to the component. If the React element was previously rendered into container, it will perform an update on it and only mutate the DOM as necessary to reflect the latest changes.
-
-    ```
-    ReactDOM.render(element, container, [callback])
-    ```
-
-    If the optional callback is provided, it will be executed after the component is rendered or updated.
-
-20. ### What will happen if you use `setState()` in constructor?
-
-    When you use `setState()`, then apart from assigning to the object state React also re-renders the component and all its children. You would get error like this: _Can only update a mounted or mounting component._ So we need to use `this.state` to initialize variables inside constructor.
-
-21. ### Is it good to use `setState()` in `componentWillMount()` method?
-
-    Yes, it is safe to use `setState()` inside `componentWillMount()` method. But at the same it is recommended to avoid async initialization in `componentWillMount()` lifecycle method. `componentWillMount()` is invoked immediately before mounting occurs. It is called before `render()`, therefore setting state in this method will not trigger a re-render. Avoid introducing any side-effects or subscriptions in this method. We need to make sure async calls for component initialization happened in `componentDidMount()` instead of `componentWillMount()`.
-
-    ```jsx harmony
-    componentDidMount() {
-      axios.get(`api/todos`)
-        .then((result) => {
-          this.setState({
-            messages: [...result.data]
-          })
-        })
-    }
-    ```
-
-22. ### What will happen if you use props in initial state?
-
-    If the props on the component are changed without the component being refreshed, the new prop value will never be displayed because the constructor function will never update the current state of the component. The initialization of state from props only runs when the component is first created.
-
-    The below component won't display the updated input value:
-
-    ```jsx harmony
-    class MyComponent extends React.Component {
-      constructor(props) {
-        super(props);
-
-        this.state = {
-          records: [],
-          inputValue: this.props.inputValue,
-        };
-      }
-
-      render() {
-        return <div>{this.state.inputValue}</div>;
-      }
-    }
-    ```
-
-    Using props inside render method will update the value:
-
-    ```jsx harmony
-    class MyComponent extends React.Component {
-      constructor(props) {
-        super(props);
-
-        this.state = {
-          record: [],
-        };
-      }
-
-      render() {
-        return <div>{this.props.inputValue}</div>;
-      }
-    }
-    ```
-
-23. ### How you use decorators in React?
-
-    You can _decorate_ your _class_ components, which is the same as passing the component into a function. **Decorators** are flexible and readable way of modifying component functionality.
-
-    ```jsx harmony
-    @setTitle("Profile")
-    class Profile extends React.Component {
-      //....
-    }
-
-    /*
-      title is a string that will be set as a document title
-      WrappedComponent is what our decorator will receive when
-      put directly above a component class as seen in the example above
-    */
-    const setTitle = (title) => (WrappedComponent) => {
-      return class extends React.Component {
-        componentDidMount() {
-          document.title = title;
-        }
-
-        render() {
-          return <WrappedComponent {...this.props} />;
-        }
-      };
-    };
-    ```
-
-    **Note:** Decorators are a feature that didn't make it into ES7, but are currently a _stage 2 proposal_.
-
-24. ### What is CRA and its benefits?
-
-    The `create-react-app` CLI tool allows you to quickly create & run React applications with no configuration step.
-
-    Let's create Todo App using _CRA_:
-
-    ```console
-    # Installation
-    $ npm install -g create-react-app
-
-    # Create new project
-    $ create-react-app todo-app
-    $ cd todo-app
-
-    # Build, test and run
-    $ npm run build
-    $ npm run test
-    $ npm start
-    ```
-
-    It includes everything we need to build a React app:
-
-    1. React, JSX, ES6, and Flow syntax support.
-    2. Language extras beyond ES6 like the object spread operator.
-    3. Autoprefixed CSS, so you don’t need -webkit- or other prefixes.
-    4. A fast interactive unit test runner with built-in support for coverage reporting.
-    5. A live development server that warns about common mistakes.
-    6. A build script to bundle JS, CSS, and images for production, with hashes and sourcemaps.
-
-25. ### What is the lifecycle methods order in mounting?
-
-    The lifecycle methods are called in the following order when an instance of a component is being created and inserted into the DOM.
-
-    1. `constructor()`
-    2. `static getDerivedStateFromProps()`
-    3. `render()`
-    4. `componentDidMount()`
-
-26. ### What are the lifecycle methods going to be deprecated in React v16?
-
-    The following lifecycle methods going to be unsafe coding practices and will be more problematic with async rendering.
-
-    1. `componentWillMount()`
-    2. `componentWillReceiveProps()`
-    3. `componentWillUpdate()`
-
-    Starting with React v16.3 these methods are aliased with `UNSAFE_` prefix, and the unprefixed version will be removed in React v17.
-
-27. ### What is the purpose of `getDerivedStateFromProps()` lifecycle method?
-
-    The new static `getDerivedStateFromProps()` lifecycle method is invoked after a component is instantiated as well as before it is re-rendered. It can return an object to update state, or `null` to indicate that the new props do not require any state updates.
-
-    ```javascript
-    class MyComponent extends React.Component {
-      static getDerivedStateFromProps(props, state) {
-        // ...
-      }
-    }
-    ```
-
-    This lifecycle method along with `componentDidUpdate()` covers all the use cases of `componentWillReceiveProps()`.
-
-28. ### What is the purpose of `getSnapshotBeforeUpdate()` lifecycle method?
-
-    The new `getSnapshotBeforeUpdate()` lifecycle method is called right before DOM updates. The return value from this method will be passed as the third parameter to `componentDidUpdate()`.
-
-    ```javascript
-    class MyComponent extends React.Component {
-      getSnapshotBeforeUpdate(prevProps, prevState) {
-        // ...
-      }
-    }
-    ```
-
-    This lifecycle method along with `componentDidUpdate()` covers all the use cases of `componentWillUpdate()`.
-
-29. ### What is the recommended way for naming components?
-
-    It is recommended to name the component by reference instead of using `displayName`.
-
-    Using `displayName` for naming component:
-
-    ```javascript
-    export default React.createClass({
-      displayName: "TodoApp",
-      // ...
-    });
-    ```
-
-    The **recommended** approach:
-
-    ```javascript
-    export default class TodoApp extends React.Component {
-      // ...
-    }
-    ```
-
-    also
-
-    ```javascript
-    const TodoApp = () => {
-      //...
-    };
-    export default TodoApp;
-    ```
-
-30. ### What is the recommended ordering of methods in component class?
-
-    _Recommended_ ordering of methods from _mounting_ to _render stage_:
-
-    1. `static` methods
-    2. `constructor()`
-    3. `getChildContext()`
-    4. `componentWillMount()`
-    5. `componentDidMount()`
-    6. `componentWillReceiveProps()`
-    7. `shouldComponentUpdate()`
-    8. `componentWillUpdate()`
-    9. `componentDidUpdate()`
-    10. `componentWillUnmount()`
-    11. click handlers or event handlers like `onClickSubmit()` or `onChangeDescription()`
-    12. getter methods for render like `getSelectReason()` or `getFooterContent()`
-    13. optional render methods like `renderNavigation()` or `renderProfilePicture()`
-    14. `render()`
-
-31. ### Why we need to pass a function to setState()?
-
-    The reason behind for this is that `setState()` is an asynchronous operation. React batches state changes for performance reasons, so the state may not change immediately after `setState()` is called. That means you should not rely on the current state when calling `setState()` since you can't be sure what that state will be. The solution is to pass a function to `setState()`, with the previous state as an argument. By doing this you can avoid issues with the user getting the old state value on access due to the asynchronous nature of `setState()`.
-
-    Let's say the initial count value is zero. After three consecutive increment operations, the value is going to be incremented only by one.
-
-    ```javascript
-    // assuming this.state.count === 0
-    this.setState({ count: this.state.count + 1 });
-    this.setState({ count: this.state.count + 1 });
-    this.setState({ count: this.state.count + 1 });
-    // this.state.count === 1, not 3
-    ```
-
-    If we pass a function to `setState()`, the count gets incremented correctly.
-
-    ```javascript
-    this.setState((prevState, props) => ({
-      count: prevState.count + props.increment,
-    }));
-    // this.state.count === 3 as expected
-    ```
-
-    **(OR)**
-
-    ### Why function is preferred over object for `setState()`?
-
-    React may batch multiple `setState()` calls into a single update for performance. Because `this.props` and `this.state` may be updated asynchronously, you should not rely on their values for calculating the next state.
-
-    This counter example will fail to update as expected:
-
-    ```javascript
-    // Wrong
-    this.setState({
-      counter: this.state.counter + this.props.increment,
-    });
-    ```
-
-    The preferred approach is to call `setState()` with function rather than object. That function will receive the previous state as the first argument, and the props at the time the update is applied as the second argument.
-
-    ```javascript
-    // Correct
-    this.setState((prevState, props) => ({
-      counter: prevState.counter + props.increment,
-    }));
-    ```
-
-32. ### Why is `isMounted()` an anti-pattern and what is the proper solution?
-
-    The primary use case for `isMounted()` is to avoid calling `setState()` after a component has been unmounted, because it will emit a warning.
-
-    ```javascript
-    if (this.isMounted()) {
-      this.setState({...})
-    }
-    ```
-
-    Checking `isMounted()` before calling `setState()` does eliminate the warning, but it also defeats the purpose of the warning. Using `isMounted()` is a code smell because the only reason you would check is because you think you might be holding a reference after the component has unmounted.
-
-    An optimal solution would be to find places where `setState()` might be called after a component has unmounted, and fix them. Such situations most commonly occur due to callbacks, when a component is waiting for some data and gets unmounted before the data arrives. Ideally, any callbacks should be canceled in `componentWillUnmount()`, prior to unmounting.
-
-33. ### What is the difference between constructor and getInitialState?
-
-    You should initialize state in the constructor when using ES6 classes, and `getInitialState()` method when using `React.createClass()`.
-
-    **Using ES6 classes:**
-
-    ```javascript
-    class MyComponent extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = {
-          /* initial state */
-        };
-      }
-    }
-    ```
-
-    **Using `React.createClass()`:**
-
-    ```javascript
-    const MyComponent = React.createClass({
-      getInitialState() {
-        return {
-          /* initial state */
-        };
-      },
-    });
-    ```
-
-    **Note:** `React.createClass()` is deprecated and removed in React v16. Use plain JavaScript classes instead.
-
-34. ### Can you force a component to re-render without calling setState?
-
-    By default, when your component's state or props change, your component will re-render. If your `render()` method depends on some other data, you can tell React that the component needs re-rendering by calling `forceUpdate()`.
-
-    ```javascript
-    component.forceUpdate(callback);
-    ```
-
-    It is recommended to avoid all uses of `forceUpdate()` and only read from `this.props` and `this.state` in `render()`.
-
-35. ### What is the difference between `super()` and `super(props)` in React using ES6 classes?
-
-    When you want to access `this.props` in `constructor()` then you should pass props to `super()` method.
-
-    **Using `super(props)`:**
-
-    ```javascript
-    class MyComponent extends React.Component {
-      constructor(props) {
-        super(props);
-        console.log(this.props); // { name: 'John', ... }
-      }
-    }
-    ```
-
-    **Using `super()`:**
-
-    ```javascript
-    class MyComponent extends React.Component {
-      constructor(props) {
-        super();
-        console.log(this.props); // undefined
-      }
-    }
-    ```
-
-    Outside `constructor()` both will display same value for `this.props`.
-
-36. ### What is the difference between `setState()` and `replaceState()` methods?
-
-    When you use `setState()` the current and previous states are merged. `replaceState()` throws out the current state, and replaces it with only what you provide. Usually `setState()` is used unless you really need to remove all previous keys for some reason. You can also set state to `false`/`null` in `setState()` instead of using `replaceState()`.
-
-37. ### How to listen to state changes?
-
-    The `componentDidUpdate` lifecycle method will be called when state changes. You can compare provided state and props values with current state and props to determine if something meaningful changed.
-
-    ```
-    componentDidUpdate(object prevProps, object prevState)
-    ```
-
-    **Note:** The previous releases of ReactJS also uses `componentWillUpdate(object nextProps, object nextState)` for state changes. It has been deprecated in latest releases.
-
-38. ### What is the recommended approach of removing an array element in React state?
-
-    The better approach is to use `Array.prototype.filter()` method.
-
-    For example, let's create a `removeItem()` method for updating the state.
-
-    ```javascript
-    removeItem(index) {
-      this.setState({
-        data: this.state.data.filter((item, i) => i !== index)
-      })
-    }
-    ```
-
-39. ### Is it possible to use React without rendering HTML?
-
-    It is possible. Below are the possible options:
-
-    ```jsx harmony
-    render() {
-      return false
-    }
-    ```
-
-    ```jsx harmony
-    render() {
-      return true
-    }
-    ```
-
-    ```jsx harmony
-    render() {
-      return null
-    }
-    ```
-
-    React version >=16.0.0:
-
-    ```jsx harmony
-    render() {
-      return []
-    }
-    ```
-
-    ```jsx harmony
-    render() {
-      return ""
-    }
-    ```
-
-    React version >=16.2.0:
-
-    ```jsx harmony
-    render() {
-      return <React.Fragment></React.Fragment>
-    }
-    ```
-
-    ```jsx harmony
-    render() {
-      return <></>
-    }
-    ```
-
-    React version >=18.0.0:
-
-    ```jsx harmony
-    render() {
-      return undefined
-    }
-    ```
-
-40. ### What are the possible ways of updating objects in state?
-
-    1. **Calling `setState()` with an object to merge with state:**
-
-       - Using `Object.assign()` to create a copy of the object:
-
-         ```javascript
-         const user = Object.assign({}, this.state.user, { age: 42 });
-         this.setState({ user });
-         ```
-
-       - Using _spread operator_:
-
-         ```javascript
-         const user = { ...this.state.user, age: 42 };
-         this.setState({ user });
-         ```
-
-    2. **Calling `setState()` with a function:**
-
-       ```javascript
-       this.setState((prevState) => ({
-         user: {
-           ...prevState.user,
-           age: 42,
-         },
-       }));
-       ```
-
-41. ### What are the approaches to include polyfills in your `create-react-app`?
-
-    There are approaches to include polyfills in create-react-app,
-
-    1. **Manual import from `core-js`:**
-
-       Create a file called (something like) `polyfills.js` and import it into root `index.js` file. Run `npm install core-js` or `yarn add core-js` and import your specific required features.
-
-       ```javascript
-       import "core-js/fn/array/find";
-       import "core-js/fn/array/includes";
-       import "core-js/fn/number/is-nan";
-       ```
-
-    2. **Using Polyfill service:**
-
-       Use the polyfill.io CDN to retrieve custom, browser-specific polyfills by adding this line to `index.html`:
-
-       ```html
-       <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.includes"></script>
-       ```
-
-       In the above script we had to explicitly request the `Array.prototype.includes` feature as it is not included in the default feature set.
-
-42. ### How to use https instead of http in create-react-app?
-
-    You just need to use `HTTPS=true` configuration. You can edit your `package.json` scripts section:
-
-    ```json
-    "scripts": {
-      "start": "set HTTPS=true && react-scripts start"
-    }
-    ```
-
-    or just run `set HTTPS=true && npm start`
-
-43. ### How to avoid using relative path imports in create-react-app?
-
-    Create a file called `.env` in the project root and write the import path:
-
-    ```
-    NODE_PATH=src/app
-    ```
-
-    After that restart the development server. Now you should be able to import anything inside `src/app` without relative paths.
-
-44. ### How to update a component every second?
-
-    You need to use `setInterval()` to trigger the change, but you also need to clear the timer when the component unmounts to prevent errors and memory leaks.
-
-    ```javascript
-    componentDidMount() {
-      this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000)
-    }
-
-    componentWillUnmount() {
-      clearInterval(this.interval)
-    }
-    ```
-
-45. ### Why is a component constructor called only once?
-
-    React's _reconciliation_ algorithm assumes that without any information to the contrary, if a custom component appears in the same place on subsequent renders, it's the same component as before, so reuses the previous instance rather than creating a new one.
-
-46. ### How to define constants in React?
-
-    You can use ES7 `static` field to define constant.
-
-    ```javascript
-    class MyComponent extends React.Component {
-      static DEFAULT_PAGINATION = 10;
-    }
-    ```
-
-47. ### How to programmatically trigger click event in React?
-
-    You could use the ref prop to acquire a reference to the underlying `HTMLInputElement` object through a callback, store the reference as a class property, then use that reference to later trigger a click from your event handlers using the `HTMLElement.click` method.
-
-    This can be done in two steps:
-
-    1. Create ref in render method:
-
-       ```jsx harmony
-       <input ref={(input) => (this.inputElement = input)} />
-       ```
-
-    2. Apply click event in your event handler:
-
-       ```javascript
-       this.inputElement.click();
-       ```
-
-48. ### How to make AJAX call and in which component lifecycle methods should I make an AJAX call?
-
-    You can use AJAX libraries such as Axios, jQuery AJAX, and the browser built-in `fetch`. You should fetch data in the `componentDidMount()` lifecycle method. This is so you can use `setState()` to update your component when the data is retrieved.
-
-    For example, the employees list fetched from API and set local state:
-
-    ```jsx harmony
-    class MyComponent extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = {
-          employees: [],
-          error: null,
-        };
-      }
-
-      componentDidMount() {
-        fetch("https://api.example.com/items")
-          .then((res) => res.json())
-          .then(
-            (result) => {
-              this.setState({
-                employees: result.employees,
-              });
-            },
-            (error) => {
-              this.setState({ error });
-            }
-          );
-      }
-
-      render() {
-        const { error, employees } = this.state;
-        if (error) {
-          return <div>Error: {error.message}</div>;
-        } else {
-          return (
-            <ul>
-              {employees.map((employee) => (
-                <li key={employee.name}>
-                  {employee.name}-{employee.experience}
-                </li>
-              ))}
-            </ul>
-          );
-        }
-      }
-    }
-    ```
-
-49. ### What are render props?
-
-    **Render Props** is a simple technique for sharing code between components using a prop whose value is a function. The below component uses render prop which returns a React element.
-
-    ```jsx harmony
-    <DataProvider render={(data) => <h1>{`Hello ${data.target}`}</h1>} />
-    ```
-
-    Libraries such as React Router and DownShift are using this pattern.
-
-50. ### How to dispatch an action on load?
-
-    You can dispatch an action in `componentDidMount()` method and in `render()` method you can verify the data.
-
-    ```javascript
-    class App extends Component {
-      componentDidMount() {
-        this.props.fetchData();
-      }
-
-      render() {
-        return this.props.isLoaded ? (
-          <div>{"Loaded"}</div>
-        ) : (
-          <div>{"Not Loaded"}</div>
-        );
-      }
-    }
-
-    const mapStateToProps = (state) => ({
-      isLoaded: state.isLoaded,
-    });
-
-    const mapDispatchToProps = { fetchData };
-
-    export default connect(mapStateToProps, mapDispatchToProps)(App);
-    ```
-
-51. ### How to use `connect()` from React Redux?
-
-    You need to follow two steps to use your store in your container:
-
-    1. **Use `mapStateToProps()`:** It maps the state variables from your store to the props that you specify.
-    2. **Connect the above props to your container:** The object returned by the `mapStateToProps` function is connected to the container. You can import `connect()` from `react-redux`.
-
-       ```jsx harmony
-       import React from "react";
-       import { connect } from "react-redux";
-
-       class App extends React.Component {
-         render() {
-           return <div>{this.props.containerData}</div>;
-         }
-       }
-
-       function mapStateToProps(state) {
-         return { containerData: state.data };
-       }
-
-       export default connect(mapStateToProps)(App);
-       ```
-
-52. ### Whats the purpose of `at` symbol in the Redux connect decorator?
-
-    The **@** symbol is in fact a JavaScript expression used to signify decorators. _Decorators_ make it possible to annotate and modify classes and properties at design time.
-
-    Let's take an example setting up Redux without and with a decorator.
-
-    - **Without decorator:**
-
-      ```javascript
-      import React from "react";
-      import * as actionCreators from "./actionCreators";
-      import { bindActionCreators } from "redux";
-      import { connect } from "react-redux";
-
-      function mapStateToProps(state) {
-        return { todos: state.todos };
-      }
-
-      function mapDispatchToProps(dispatch) {
-        return { actions: bindActionCreators(actionCreators, dispatch) };
-      }
-
-      class MyApp extends React.Component {
-        // ...define your main app here
-      }
-
-      export default connect(mapStateToProps, mapDispatchToProps)(MyApp);
-      ```
-
-    - **With decorator:**
-
-      ```javascript
-      import React from "react";
-      import * as actionCreators from "./actionCreators";
-      import { bindActionCreators } from "redux";
-      import { connect } from "react-redux";
-
-      function mapStateToProps(state) {
-        return { todos: state.todos };
-      }
-
-      function mapDispatchToProps(dispatch) {
-        return { actions: bindActionCreators(actionCreators, dispatch) };
-      }
-
-      @connect(mapStateToProps, mapDispatchToProps)
-      export default class MyApp extends React.Component {
-        // ...define your main app here
-      }
-      ```
-
-    The above examples are almost similar except the usage of decorator. The decorator syntax isn't built into any JavaScript runtimes yet, and is still experimental and subject to change. You can use babel for the decorators support.
-
-53. ### How to use TypeScript in `create-react-app` application?
-
-        Starting from react-scripts@3.3.0+ releases onwards, you can now optionally start a new app from a template by appending `--template [template-name]` to the creation command. If you don't select a template, it will create your project with base template. Remember that templates are always named in the format `cra-template-[template-name]`, here you only need to fill the `[template-name]` section.
-
-        The typeScript can be used in your project by appending `--template typescript` to the creation command.
-
-         ```bash
-         npx create-react-app my-app --template typescript
-         ```
-
-        But if you are using React Scripting between react-scripts@2.1.0 and react-scripts@3.2.x , there is a built-in support for TypeScript. i.e, `create-react-app` now supports TypeScript natively. You can just pass `--typescript` option as below
-
-         ```bash
-         npx create-react-app my-app --typescript
-
-         # or
-
-         yarn create react-app my-app --typescript
-         ```
-
-         Whereas for lower versions of react scripts, just supply `--scripts-version` option as `react-scripts-ts` while you create a new project. `react-scripts-ts` is a set of adjustments to take the standard `create-react-app` project pipeline and bring TypeScript into the mix.
-
-         Now the project layout should look like the following:
-
-         ```
-         my-app/
-         ├─ .gitignore
-         ├─ images.d.ts
-         ├─ node_modules/
-         ├─ public/
-         ├─ src/
-         │  └─ ...
-         ├─ package.json
-         ├─ tsconfig.json
-         ├─ tsconfig.prod.json
-         ├─ tsconfig.test.json
-         └─ tslint.json
-         ```
-
-54. ### Does the statics object work with ES6 classes in React?
-
-    No, `statics` only works with `React.createClass()`:
-
-    ```javascript
-    someComponent = React.createClass({
-      statics: {
-        someMethod: function () {
-          // ..
-        },
-      },
-    });
-    ```
-
-    But you can write statics inside ES6+ classes as below,
-
-    ```javascript
-    class Component extends React.Component {
-      static propTypes = {
-        // ...
-      };
-
-      static someMethod() {
-        // ...
-      }
-    }
-    ```
-
-    or writing them outside class as below,
-
-    ```javascript
-    class Component extends React.Component {
-       ....
-    }
-
-    Component.propTypes = {...}
-    Component.someMethod = function(){....}
-    ```
-
-55. ### Why are inline ref callbacks or functions not recommended?
-
-    If the ref callback is defined as an inline function, it will get called twice during updates, first with null and then again with the DOM element. This is because a new instance of the function is created with each render, so React needs to clear the old ref and set up the new one.
-
-    ```jsx
-    class UserForm extends Component {
-      handleSubmit = () => {
-        console.log("Input Value is: ", this.input.value);
-      };
-
-      render() {
-        return (
-          <form onSubmit={this.handleSubmit}>
-            <input type="text" ref={(input) => (this.input = input)} /> //
-            Access DOM input in handle submit
-            <button type="submit">Submit</button>
-          </form>
-        );
-      }
-    }
-    ```
-
-    But our expectation is for the ref callback to get called once, when the component mounts. One quick fix is to use the ES7 class property syntax to define the function
-
-    ```jsx
-    class UserForm extends Component {
-      handleSubmit = () => {
-        console.log("Input Value is: ", this.input.value);
-      };
-
-      setSearchInput = (input) => {
-        this.input = input;
-      };
-
-      render() {
-        return (
-          <form onSubmit={this.handleSubmit}>
-            <input type="text" ref={this.setSearchInput} /> // Access DOM input
-            in handle submit
-            <button type="submit">Submit</button>
-          </form>
-        );
-      }
-    }
-    ```
-
-56. ### What are HOC factory implementations?
-
-    There are two main ways of implementing HOCs in React.
-
-    1. Props Proxy (PP) and
-    2. Inheritance Inversion (II).
-
-    But they follow different approaches for manipulating the _WrappedComponent_.
-
-    **Props Proxy**
-
-    In this approach, the render method of the HOC returns a React Element of the type of the WrappedComponent. We also pass through the props that the HOC receives, hence the name **Props Proxy**.
-
-    ```jsx
-    function ppHOC(WrappedComponent) {
-      return class PP extends React.Component {
-        render() {
-          return <WrappedComponent {...this.props} />;
-        }
-      };
-    }
-    ```
-
-    **Inheritance Inversion**
-
-    In this approach, the returned HOC class (Enhancer) extends the WrappedComponent. It is called Inheritance Inversion because instead of the WrappedComponent extending some Enhancer class, it is passively extended by the Enhancer. In this way the relationship between them seems **inverse**.
-
-    ```jsx
-    function iiHOC(WrappedComponent) {
-      return class Enhancer extends WrappedComponent {
-        render() {
-          return super.render();
-        }
-      };
-    }
-    ```
-
-57. ### How to use class field declarations syntax in React classes?
-
-    React Class Components can be made much more concise using the class field declarations. You can initialize the local state without using the constructor and declare class methods by using arrow functions without the extra need to bind them.
-
-    Let's take a counter example to demonstrate class field declarations for state without using constructor and methods without binding,
-
-    ```jsx
-    class Counter extends Component {
-      state = { value: 0 };
-
-      handleIncrement = () => {
-        this.setState((prevState) => ({
-          value: prevState.value + 1,
-        }));
-      };
-
-      handleDecrement = () => {
-        this.setState((prevState) => ({
-          value: prevState.value - 1,
-        }));
-      };
-
-      render() {
-        return (
-          <div>
-            {this.state.value}
-
-            <button onClick={this.handleIncrement}>+</button>
-            <button onClick={this.handleDecrement}>-</button>
-          </div>
-        );
-      }
-    }
-    ```
-
-58. ### Why do you not need error boundaries for event handlers?
-
-    Error boundaries do not catch errors inside event handlers.
-
-    React doesn’t need error boundaries to recover from errors in event handlers. Unlike the render method and lifecycle methods, the event handlers don’t happen during rendering. So if they throw, React still knows what to display on the screen.
-
-    If you need to catch an error inside an event handler, use the regular JavaScript try / catch statement:
-
-    ```javascript
-    class MyComponent extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = { error: null };
-        this.handleClick = this.handleClick.bind(this);
-      }
-
-      handleClick() {
-        try {
-          // Do something that could throw
-        } catch (error) {
-          this.setState({ error });
-        }
-      }
-
-      render() {
-        if (this.state.error) {
-          return <h1>Caught an error.</h1>;
-        }
-        return <button onClick={this.handleClick}>Click Me</button>;
-      }
-    }
-    ```
-
-    Note that the above example is demonstrating regular JavaScript behavior and doesn’t use error boundaries.
-
-59. ### What is the difference between try catch block and error boundaries?
-
-    Try catch block works with imperative code whereas error boundaries are meant for declarative code to render on the screen.
-
-    For example, the try catch block used for below imperative code
-
-    ```javascript
-    try {
-      showButton();
-    } catch (error) {
-      // ...
-    }
-    ```
-
-    Whereas error boundaries wrap declarative code as below,
-
-    ```javascript
-    <ErrorBoundary>
-      <MyComponent />
-    </ErrorBoundary>
-    ```
-
-    So if an error occurs in a **componentDidUpdate** method caused by a **setState** somewhere deep in the tree, it will still correctly propagate to the closest error boundary.
-
-60. ### What is the required method to be defined for a class component?
-
-    The `render()` method is the only required method in a class component. i.e, All methods other than render method are optional for a class component.
-
-61. ### What are the possible return types of render method?
-
-    Below are the list of following types used and return from render method,
-
-    1. **React elements:** Elements that instruct React to render a DOM node. It includes html elements such as `<div/>` and user defined elements.
-    2. **Arrays and fragments:** Return multiple elements to render as Arrays and Fragments to wrap multiple elements
-    3. **Portals:** Render children into a different DOM subtree.
-    4. **String and numbers:** Render both Strings and Numbers as text nodes in the DOM
-    5. **Booleans or null:** Doesn't render anything but these types are used to conditionally render content.
-
-62. ### What is the main purpose of constructor?
-
-    The constructor is mainly used for two purposes,
-
-    1. To initialize local state by assigning object to this.state
-    2. For binding event handler methods to the instance
-       For example, the below code covers both the above cases,
-
-    ```javascript
-    constructor(props) {
-      super(props);
-      // Don't call this.setState() here!
-      this.state = { counter: 0 };
-      this.handleClick = this.handleClick.bind(this);
-    }
-    ```
-
-63. ### Is it mandatory to define constructor for React component?
-
-    No, it is not mandatory. i.e, If you don’t initialize state and you don’t bind methods, you don’t need to implement a constructor for your React component.
-
-64. ### Why should not call setState in componentWillUnmount?
-
-    You should not call `setState()` in `componentWillUnmount()` because once a component instance is unmounted, it will never be mounted again.
-
-65. ### What is the purpose of getDerivedStateFromError?
-
-    This lifecycle method is invoked after an error has been thrown by a descendant component. It receives the error that was thrown as a parameter and should return a value to update state.
-
-    The signature of the lifecycle method is as follows,
-
-    ```javascript
-    static getDerivedStateFromError(error)
-    ```
-
-    Let us take error boundary use case with the above lifecycle method for demonstration purpose,
-
-    ```javascript
-    class ErrorBoundary extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = { hasError: false };
-      }
-
-      static getDerivedStateFromError(error) {
-        // Update state so the next render will show the fallback UI.
-        return { hasError: true };
-      }
-
-      render() {
-        if (this.state.hasError) {
-          // You can render any custom fallback UI
-          return <h1>Something went wrong.</h1>;
-        }
-
-        return this.props.children;
-      }
-    }
-    ```
-
-66. ### What is the methods order when component re-rendered?
-
-    An update can be caused by changes to props or state. The below methods are called in the following order when a component is being re-rendered.
-
-    1. static getDerivedStateFromProps()
-    2. shouldComponentUpdate()
-    3. render()
-    4. getSnapshotBeforeUpdate()
-    5. componentDidUpdate()
-
-67. ### What are the methods invoked during error handling?
-
-    Below methods are called when there is an error during rendering, in a lifecycle method, or in the constructor of any child component.
-
-    1. static getDerivedStateFromError()
-    2. componentDidCatch()
-
-68. ### What is the purpose of unmountComponentAtNode method?
-
-    This method is available from react-dom package and it removes a mounted React component from the DOM and clean up its event handlers and state. If no component was mounted in the container, calling this function does nothing. Returns true if a component was unmounted and false if there was no component to unmount.
-
-    The method signature would be as follows,
-
-    ```javascript
-    ReactDOM.unmountComponentAtNode(container);
-    ```
-
-69. ### What are the limitations with HOCs?
-
-    Higher-order components come with a few caveats apart from its benefits. Below are the few listed in an order,
-
-    1. **Don’t use HOCs inside the render method:**
-       It is not recommended to apply a HOC to a component within the render method of a component.
-
-       ```javascript
-       render() {
-         // A new version of EnhancedComponent is created on every render
-         // EnhancedComponent1 !== EnhancedComponent2
-         const EnhancedComponent = enhance(MyComponent);
-         // That causes the entire subtree to unmount/remount each time!
-         return <EnhancedComponent />;
-       }
-       ```
-
-       The above code impacts on performance by remounting a component that causes the state of that component and all of its children to be lost. Instead, apply HOCs outside the component definition so that the resulting component is created only once.
-
-    2. **Static methods must be copied over:**
-       When you apply a HOC to a component the new component does not have any of the static methods of the original component
-
-       ```javascript
-       // Define a static method
-       WrappedComponent.staticMethod = function () {
-         /*...*/
-       };
-       // Now apply a HOC
-       const EnhancedComponent = enhance(WrappedComponent);
-
-       // The enhanced component has no static method
-       typeof EnhancedComponent.staticMethod === "undefined"; // true
-       ```
-
-       You can overcome this by copying the methods onto the container before returning it,
-
-       ```javascript
-       function enhance(WrappedComponent) {
-         class Enhance extends React.Component {
-           /*...*/
-         }
-         // Must know exactly which method(s) to copy :(
-         Enhance.staticMethod = WrappedComponent.staticMethod;
-         return Enhance;
-       }
-       ```
-
-    3. **Refs aren’t passed through:**
-       For HOCs you need to pass through all props to the wrapped component but this does not work for refs. This is because ref is not really a prop similar to key. In this case you need to use the React.forwardRef API
-
-70. ### How to debug forwardRefs in DevTools?
-
-    **React.forwardRef** accepts a render function as parameter and DevTools uses this function to determine what to display for the ref forwarding component.
-
-    For example, If you don't name the render function or not using displayName property then it will appear as ”ForwardRef” in the DevTools,
-
-    ```javascript
-    const WrappedComponent = React.forwardRef((props, ref) => {
-      return <LogProps {...props} forwardedRef={ref} />;
-    });
-    ```
-
-    But If you name the render function then it will appear as **”ForwardRef(myFunction)”**
-
-    ```javascript
-    const WrappedComponent = React.forwardRef(function myFunction(props, ref) {
-      return <LogProps {...props} forwardedRef={ref} />;
-    });
-    ```
-
-    As an alternative, You can also set displayName property for forwardRef function,
-
-    ```javascript
-    function logProps(Component) {
-      class LogProps extends React.Component {
-        // ...
-      }
-
-      function forwardRef(props, ref) {
-        return <LogProps {...props} forwardedRef={ref} />;
-      }
-
-      // Give this component a more helpful display name in DevTools.
-      // e.g. "ForwardRef(logProps(MyComponent))"
-      const name = Component.displayName || Component.name;
-      forwardRef.displayName = `logProps(${name})`;
-
-      return React.forwardRef(forwardRef);
-    }
-    ```
-
-71. ### Is it good to use arrow functions in render methods?
-
-    Yes, You can use. It is often the easiest way to pass parameters to callback functions. But you need to optimize the performance while using it.
-
-    ```javascript
-    class Foo extends Component {
-      handleClick() {
-        console.log("Click happened");
-      }
-      render() {
-        return <button onClick={() => this.handleClick()}>Click Me</button>;
-      }
-    }
-    ```
-
-    **Note:** Using an arrow function in render method creates a new function each time the component renders, which may have performance implications
-
-72. ### How do you say that state updates are merged?
-
-    When you call setState() in the component, React merges the object you provide into the current state.
-
-    For example, let us take a facebook user with posts and comments details as state variables,
-
-    ```javascript
-      constructor(props) {
-        super(props);
-        this.state = {
-          posts: [],
-          comments: []
-        };
-      }
-    ```
-
-    Now you can update them independently with separate `setState()` calls as below,
-
-    ```javascript
-     componentDidMount() {
-        fetchPosts().then(response => {
-          this.setState({
-            posts: response.posts
-          });
-        });
-
-        fetchComments().then(response => {
-          this.setState({
-            comments: response.comments
-          });
-        });
-      }
-    ```
-
-    As mentioned in the above code snippets, `this.setState({comments})` updates only comments variable without modifying or replacing `posts` variable.
-
-73. ### How do you pass arguments to an event handler?
-
-    During iterations or loops, it is common to pass an extra parameter to an event handler. This can be achieved through arrow functions or bind method.
-
-    Let us take an example of user details updated in a grid,
-
-    ```javascript
-    <button onClick={(e) => this.updateUser(userId, e)}>Update User details</button>
-    <button onClick={this.updateUser.bind(this, userId)}>Update User details</button>
-    ```
-
-    In the both approaches, the synthetic argument `e` is passed as a second argument. You need to pass it explicitly for arrow functions and it will be passed automatically for `bind` method.
-
-74. ### How to prevent component from rendering?
-
-    You can prevent component from rendering by returning null based on specific condition. This way it can conditionally render component.
-
-    ```javascript
-    function Greeting(props) {
-      if (!props.loggedIn) {
-        return null;
-      }
-
-      return <div className="greeting">welcome, {props.name}</div>;
-    }
-    ```
-
-    ```javascript
-    class User extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = {loggedIn: false, name: 'John'};
-      }
-
-      render() {
-       return (
-           <div>
-             //Prevent component render if it is not loggedIn
-             <Greeting loggedIn={this.state.loggedIn} />
-             <UserDetails name={this.state.name}>
-           </div>
-       );
-      }
-    ```
-
-    In the above example, the `greeting` component skips its rendering section by applying condition and returning null value.
-
-75. ### Give an example on How to use context?
-
-    **Context** is designed to share data that can be considered **global** for a tree of React components.
-
-    For example, in the code below lets manually thread through a “theme” prop in order to style the Button component.
-
-    ```javascript
-    //Lets create a context with a default theme value "luna"
-    const ThemeContext = React.createContext("luna");
-    // Create App component where it uses provider to pass theme value in the tree
-    class App extends React.Component {
-      render() {
-        return (
-          <ThemeContext.Provider value="nova">
-            <Toolbar />
-          </ThemeContext.Provider>
-        );
-      }
-    }
-    // A middle component where you don't need to pass theme prop anymore
-    function Toolbar(props) {
-      return (
-        <div>
-          <ThemedButton />
-        </div>
-      );
-    }
-    // Lets read theme value in the button component to use
-    class ThemedButton extends React.Component {
-      static contextType = ThemeContext;
-      render() {
-        return <Button theme={this.context} />;
-      }
-    }
-    ```
-
-76. ### How do you use contextType?
-
-    ContextType is used to consume the context object. The contextType property can be used in two ways,
-
-    1. **contextType as property of class:**
-       The contextType property on a class can be assigned a Context object created by React.createContext(). After that, you can consume the nearest current value of that Context type using this.context in any of the lifecycle methods and render function.
-
-       Lets assign contextType property on MyClass as below,
-
-       ```javascript
-       class MyClass extends React.Component {
-         componentDidMount() {
-           let value = this.context;
-           /* perform a side-effect at mount using the value of MyContext */
-         }
-         componentDidUpdate() {
-           let value = this.context;
-           /* ... */
-         }
-         componentWillUnmount() {
-           let value = this.context;
-           /* ... */
-         }
-         render() {
-           let value = this.context;
-           /* render something based on the value of MyContext */
-         }
-       }
-       MyClass.contextType = MyContext;
-       ```
-
-    2. **Static field**
-       You can use a static class field to initialize your contextType using public class field syntax.
-
-       ```javascript
-       class MyClass extends React.Component {
-         static contextType = MyContext;
-         render() {
-           let value = this.context;
-           /* render something based on the value */
-         }
-       }
-       ```
-
-77. ### What is a consumer?
-
-    A Consumer is a React component that subscribes to context changes. It requires a function as a child which receives current context value as argument and returns a react node. The value argument passed to the function will be equal to the value prop of the closest Provider for this context above in the tree.
-
-    Lets take a simple example,
-
-    ```javascript
-    <MyContext.Consumer>
-      {value => /* render something based on the context value */}
-    </MyContext.Consumer>
-    ```
-
-78. ### How do you solve performance corner cases while using context?
-
-    The context uses reference identity to determine when to re-render, there are some gotchas that could trigger unintentional renders in consumers when a provider’s parent re-renders.
-
-    For example, the code below will re-render all consumers every time the Provider re-renders because a new object is always created for value.
-
-    ```javascript
-    class App extends React.Component {
-      render() {
-        return (
-          <Provider value={{ something: "something" }}>
-            <Toolbar />
-          </Provider>
-        );
-      }
-    }
-    ```
-
-    This can be solved by lifting up the value to parent state,
-
-    ```javascript
-    class App extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = {
-          value: { something: "something" },
-        };
-      }
-
-      render() {
-        return (
-          <Provider value={this.state.value}>
-            <Toolbar />
-          </Provider>
-        );
-      }
-    }
-    ```
-
-79. ### What is the purpose of forward ref in HOCs?
-
-    Refs will not get passed through because ref is not a prop. It is handled differently by React just like **key**. If you add a ref to a HOC, the ref will refer to the outermost container component, not the wrapped component. In this case, you can use Forward Ref API. For example, we can explicitly forward refs to the inner FancyButton component using the React.forwardRef API.
-
-    The below HOC logs all props,
-
-    ```javascript
-    function logProps(Component) {
-      class LogProps extends React.Component {
-        componentDidUpdate(prevProps) {
-          console.log("old props:", prevProps);
-          console.log("new props:", this.props);
-        }
-
-        render() {
-          const { forwardedRef, ...rest } = this.props;
-
-          // Assign the custom prop "forwardedRef" as a ref
-          return <Component ref={forwardedRef} {...rest} />;
-        }
-      }
-
-      return React.forwardRef((props, ref) => {
-        return <LogProps {...props} forwardedRef={ref} />;
-      });
-    }
-    ```
-
-    Let's use this HOC to log all props that get passed to our “fancy button” component,
-
-    ```javascript
-    class FancyButton extends React.Component {
-      focus() {
-        // ...
-      }
-
-      // ...
-    }
-    export default logProps(FancyButton);
-    ```
-
-    Now let's create a ref and pass it to FancyButton component. In this case, you can set focus to button element.
-
-    ```javascript
-    import FancyButton from "./FancyButton";
-
-    const ref = React.createRef();
-    ref.current.focus();
-    <FancyButton label="Click Me" handleClick={handleClick} ref={ref} />;
-    ```
-
-80. ### Is ref argument available for all functions or class components?
-
-    Regular function or class components don’t receive the ref argument, and ref is not available in props either. The second ref argument only exists when you define a component with React.forwardRef call.
-
-81. ### Why do you need additional care for component libraries while using forward refs?
-
-    When you start using forwardRef in a component library, you should treat it as a breaking change and release a new major version of your library. This is because your library likely has a different behavior such as what refs get assigned to, and what types are exported. These changes can break apps and other libraries that depend on the old behavior.
-
-82. ### How to create react class components without ES6?
-
-    If you don’t use ES6 then you may need to use the create-react-class module instead. For default props, you need to define getDefaultProps() as a function on the passed object. Whereas for initial state, you have to provide a separate getInitialState method that returns the initial state.
-
-    ```javascript
-    var Greeting = createReactClass({
-      getDefaultProps: function () {
-        return {
-          name: "Jhohn",
-        };
-      },
-      getInitialState: function () {
-        return { message: this.props.message };
-      },
-      handleClick: function () {
-        console.log(this.state.message);
-      },
-      render: function () {
-        return <h1>Hello, {this.props.name}</h1>;
-      },
-    });
-    ```
-
-    **Note:** If you use createReactClass then auto binding is available for all methods. i.e, You don't need to use `.bind(this)` with in constructor for event handlers.
-
-83. ### Is it possible to use react without JSX?
-
-    Yes, JSX is not mandatory for using React. Actually it is convenient when you don’t want to set up compilation in your build environment. Each JSX element is just syntactic sugar for calling `React.createElement(component, props, ...children)`.
-
-    For example, let us take a greeting example with JSX,
-
-    ```javascript
-    class Greeting extends React.Component {
-      render() {
-        return <div>Hello {this.props.message}</div>;
-      }
-    }
-
-    ReactDOM.render(
-      <Greeting message="World" />,
-      document.getElementById("root")
-    );
-    ```
-
-    You can write the same code without JSX as below,
-
-    ```javascript
-    class Greeting extends React.Component {
-      render() {
-        return React.createElement("div", null, `Hello ${this.props.message}`);
-      }
-    }
-
-    ReactDOM.render(
-      React.createElement(Greeting, { message: "World" }, null),
-      document.getElementById("root")
-    );
-    ```
-
-84. ### How do you create HOC using render props?
-
-    You can implement most higher-order components (HOC) using a regular component with a render prop. For example, if you would prefer to have a withMouse HOC instead of a <Mouse> component, you could easily create one using a regular <Mouse> with a render prop.
-
-    ```javascript
-    function withMouse(Component) {
-      return class extends React.Component {
-        render() {
-          return (
-            <Mouse
-              render={(mouse) => <Component {...this.props} mouse={mouse} />}
-            />
-          );
-        }
-      };
-    }
-    ```
-
-    This way render props gives the flexibility of using either pattern.
-
-85. ### What is react scripts?
-
-    The `react-scripts` package is a set of scripts from the create-react-app starter pack which helps you kick off projects without configuring. The `react-scripts start` command sets up the development environment and starts a server, as well as hot module reloading.
-
-86. ### What are the features of create react app?
-
-    Below are the list of some of the features provided by create react app.
-
-    1. React, JSX, ES6, Typescript and Flow syntax support.
-    2. Autoprefixed CSS
-    3. CSS Reset/Normalize
-    4. A live development server
-    5. A fast interactive unit test runner with built-in support for coverage reporting
-    6. A build script to bundle JS, CSS, and images for production, with hashes and sourcemaps
-    7. An offline-first service worker and a web app manifest, meeting all the Progressive Web App criteria.
-
-87. ### What is the purpose of renderToNodeStream method?
-
-    The `ReactDOMServer#renderToNodeStream` method is used to generate HTML on the server and send the markup down on the initial request for faster page loads. It also helps search engines to crawl your pages easily for SEO purposes.
-    **Note:** Remember this method is not available in the browser but only server.
-
-88. ### How do you get redux scaffolding using create-react-app?
-
-    Redux team has provided official redux+js or redux+typescript templates for create-react-app project. The generated project setup includes,
-
-    1. Redux Toolkit and React-Redux dependencies
-    2. Create and configure Redux store
-    3. React-Redux `<Provider>` passing the store to React components
-    4. Small "counter" example to demo how to add redux logic and React-Redux hooks API to interact with the store from components
-       The below commands need to be executed along with template option as below,
-    5. **Javascript template:**
-
-    ```js
-    npx create-react-app my-app --template redux
-    ```
-
-    2. **Typescript template:**
-
-    ```js
-    npx create-react-app my-app --template redux-typescript
-    ```
-
-89. ### What is state mutation and how to prevent it?
-
-    `State mutation` happens when you try to update the state of a component without actually using `setState` function. This can happen when you are trying to do some computations using a state variable and unknowingly save the result in the same state variable. This is the main reason why it is advised to return new instances of state variables from the reducers by using Object.assign({}, ...) or spread syntax.
-
-    This can cause unknown issues in the UI as the value of the state variable got updated without telling React to check what all components were being affected from this update and it can cause UI bugs.
-
-    Ex:
-
-    ```javascript
-    class A extends React.component {
-      constructor(props) {
-        super(props);
-        this.state = {
-          loading: false
-        }
-     }
-
-    componentDidMount() {
-      let { loading } = this.state;
-      loading = (() => true)(); // Trying to perform an operation and directly saving in a state variable
-    }
-
-    ```
-
-    **How to prevent it:** Make sure your state variables are immutable by either enforcing immutability by using plugins like Immutable.js, always using `setState` to make updates, and returning new instances in reducers when sending updated state values.
-
-## Disclaimer
-
-The questions provided in this repository are the summary of frequently asked questions across numerous companies. We cannot guarantee that these questions will actually be asked during your interview process, nor should you focus on memorizing all of them. The primary purpose is for you to get a sense of what some companies might ask — do not get discouraged if you don't know the answer to all of them ⁠— that is ok!
-
-Good luck with your interview 😊
-
----
+# Destructuring Tuples::
+# Since tuples are arrays we can also destructure them.
+const graph: [number, number] = [55.2, 41.3];
+const [x, y] = graph;
+
+```
+
+- TypeScript Object Types
+
+```bash
+
+# OBJECT TYPE
+
+const car: { type: string, model: string, year: number } = {
+  type: "Toyota", model: "Corolla", year: 2009 };
+
+# TypeScript can infer the types of properties based on their values.
+const ourTuple = { name: "ok" };
+ourTuple.name = "go"; # Can change without error
+ourTuple.name = 3; # will show error
+
+# Optional Properties::
+
+const car: { type: string, mileage: number } = { # error
+  type: "Toyota"
+};
+const car: { type: string, mileage?: number } = {
+# added "?" so mileage property is now optional so no error
+  type: "Toyota"
+};
+car.mileage = 2000;
+
+# Index Signatures::
+
+# this means the key is string and value is number for all the value
+const obj: { [index: string]: number } = { one: 1 };
+obj.two = 2; # Works fine
+obj.three = "three"; # Gives Error
+
+# Index signatures like this one can also be expressed with utility types like Record<string, number>.
+```
+
+- TypeScript Enums
+
+  - An enum is a special "class" that represents a group of constants (unchangeable variables).
+  - Enums come in two flavors string and numeric. Lets start with numeric.
+
+```bash
+# Numeric Enums - Default::
+
+# By default, enums will initialize the first value to 0 and add 1 to each additional value:
+enum CardinalDirections {
+  North,
+  East,
+  South,
+  West,
+}
+console.log(CardinalDirections.North);  # 0
+console.log(CardinalDirections.East);   # 1
+console.log(CardinalDirections.["South"]);  # 2 # You can also call it this way
+console.log(CardinalDirections.["West"]);   # 3
+console.log(CardinalDirections[1]);        # East
+console.log(CardinalDirections[3]);        # West
+console.log(CardinalDirections[0]);        # North
+
+# Numeric Enums - Initialized::
+
+# If no value is provided then it will add one to next enum value
+enum CardinalDirections {
+  North = 5,
+  East,
+  South,
+  West,
+}
+console.log(CardinalDirections.North);  # 5
+console.log(CardinalDirections.East);   # 6
+console.log(CardinalDirections.South);  # 7
+console.log(CardinalDirections.West);   # 8
+
+# Enum can have duplicate values but avoid doing this
+enum CardinalDirections {
+  North = 5,     # 5
+  East,          # 6
+  South = 5,     # 5
+  West,          # 6
+}
+# Numeric Enums - Fully Initialized::
+
+enum StatusCodes {
+  NotFound = 404,
+  Success = 200,
+  Accepted = 202,
+  BadRequest = 400,
+}
+console.log(StatusCodes["Accepted"]);    # 404 # You can also write it this way
+console.log(StatusCodes["Success"]);     # 200
+console.log(StatusCodes.Accepted);       # 202
+console.log(StatusCodes.BadRequest);     # 400
+console.log(StatusCodes[200]);           # Success
+
+# String Enums ::
+
+# Technically, you can mix and match string and numeric enum values, but it is recommended not to do so.
+enum CardinalDirections {
+  North = "myNorth",
+  East = "myEast",
+  South = "mySouth",
+  West = "myWest",
+}
+console.log(CardinalDirections["North"]);     # myNorth
+console.log(CardinalDirections["East"]);      # myEast
+console.log(CardinalDirections.South);        # mySouth
+console.log(CardinalDirections.West);         # myWest
+console.log(CardinalDirections["MyWest"]);    # West  #YOU CAN'T CALL BY VALUES (CAN DO IN NUM)
+
+```
+
+- TypeScript "Type" Aliases and "Interfaces"
+  - Aliases and Interfaces allows types to be easily shared between different variables/objects.
+
+```bash
+1. Type - # allow defining types with a custom name
+# Type Aliases can be used for primitives like string or more complex types such as objects and arrays:
+
+# First define the types here
+type CarYear = number;
+type CarType = string;
+type CarModel = string;
+type Car = {
+  year: CarYear; # Year is number as defined by CarYear
+  type: CarType;
+  model: CarModel;
+};
+
+# Then just use name here
+const myCarYear: CarYear = 2001;
+const myCarType: CarType = "Toyota";
+const myCarModel: CarModel = "Corolla";
+const myCar: Car = {
+  year: myCarYear,
+  type: myCarType,
+  model: myCarModel,
+};
+
+# Extending types :: - [MEANS ADDING TYPES]
+# It means creating a new interface with the same properties as the original, plus something new.
+type Name = {
+  name: string;
+};
+type Age = {
+  age: number;
+};
+type Person = Name & Age; # You can add them with "&"
+const person: Person = {
+  name: "Alice",
+  age: 30
+};
+console.log(person); # { name: "Alice", age: 30 }
+
+2. Interfaces
+# Interfaces are similar to type aliases, except they only apply to object types.
+
+interface Rectangle {
+  height: number,
+  width: number
+}
+
+const rectangle: Rectangle = {
+  height: 20,
+  width: 10
+};
+
+# Extending Interfaces ::
+# It means creating a new interface with the same properties as the original, plus something new.
+interface Rectangle {
+  height: number;
+  width: number;
+}
+interface ColoredRectangle extends Rectangle {
+  color: string;
+  // height: string; # gives error as it contradicts with the extend type {can write same type}
+}
+const coloredRectangle: ColoredRectangle = {
+  height: 20,
+  width: 10,
+  color: "red"
+};
+
+# Declaration Merging :: -> ONLY INTERFACE CAN DO IT AND NOT TYPES
+# you can define multiple declarations with the same name, and TypeScript will automatically merge them into a single interface.
+interface Person {
+  name: string;
+}
+interface Person {
+  age: number;
+}
+const person: Person = {
+  name: "Alice",
+  age: 30,
+};
+
+*** Differences Between interface and type in TypeScript:
+    i- Declaration Merging:
+        - Interface: Supports declaration merging.
+        - Type: Does not support declaration merging.
+
+    ii- Usage with Classes:
+        - Interface: Can be implemented by classes.
+        - Type: Can describe class instances but is less idiomatic for class implementation.
+
+    iii- Extending/Intersection:
+        - Interface: Uses extends for inheritance.
+        - Type: Uses intersection types (&) for combining types.
+
+      4. Function Overloads:
+        - Interface: Can define multiple function signatures (overloads).
+        - Type: Can define function types but less naturally supports overloads.
+
+      5. Recursive Types:
+        - Interface: Naturally suited for recursive structures.
+        - Type: Can handle recursive structures but with different syntax.
+
+```
+
+- TypeScript Union Types (Union '|' (OR))
+  - Union types are used when a value can be more than a single type.
+  - Such as when a property would be string or number.
+
+```bash
+# Using the | we are saying our parameter is a string or number
+function printStatusCode(code: string | number) {
+  console.log(`My status code is ${code}.`);
+}
+printStatusCode(404);
+printStatusCode("404");
+
+# Union Type Errors
+# Note: you need to know what your type is when union types are being used to avoid type errors:
+function printStatusCode(code: string | number) {
+  console.log(`My status code is ${code.toUpperCase()}.`);
+}
+# The above line will give error as toUpperCase() property is not for numbers:: YOU CAN SOLVE THIS BY USING "as" (CASTING) FOR PERTICULAR VARIABLE TO SPECIFY THE TYPE
+function printStatusCode(code: string | number) {
+  console.log(`My status code is ${(code as string).toUpperCase()}.`);
+}
+
+
+```
+
+- TypeScript Functions
+
+```bash
+
+1. Return Type
+
+# What type of value this function will return - MOST OF THE TIME IT WILL INFER
+function getTime(): number { # REMOVING RETURN TYPE THE FUNCTION WILL INFER THE TYPE HERE
+  return new Date().getTime();
+}
+# If no return type is defined, TypeScript will attempt to infer it through the types of the variables or expressions returned.
+
+# Void Return Type ::
+function printHello(): void {
+  console.log('Hello!');
+}
+
+2. Parameters
+
+# Function parameters are typed with a similar syntax as variable declarations.
+function multiply(a: number, b: number) {
+  return a * b;
+}
+
+# Optional Parameters :: "?"
+
+# By default TypeScript will assume all parameters are required, but they can be explicitly marked as optional.
+// the `?` operator here marks parameter `c` as optional
+function add(a: number, b: number, c?: number) {
+  return a + b + (c || 0);
+}
+
+# Default Parameters :: "="
+
+# The default value goes after the type annotation:
+function pow(value: number, exponent: number = 10) {
+  return value ** exponent;
+}
+
+# Named Parameters :: "{}:{}"
+
+function divide({ dividend, divisor }: { dividend: number, divisor: number }) {
+  return dividend / divisor;
+}
+
+# YOU CAN CREATE TYPE FOR NAMED PARAMETERS THIS WAY
+type Finding2 = (p: { x: string; y: number }) => number;
+
+# Rest Parameters :: "..."
+
+# Rest parameters can be typed like normal parameters, but the type must be an array as rest parameters are always arrays.
+function add(a: number, b: number, ...rest: number[]) {
+  return a + b + rest.reduce((p, c) => p + c, 0);
+}
+
+3. Type Alias for functions
+
+# Function types can be specified separately from functions with type aliases.
+# These types are written similarly to arrow functions
+# ONLY USED FOR FUNCTION EXPRESSION(VARIABLE FN) AND NOT FUNCITON DECLARATION(NORMAL FN)
+# FOR FUNCTION DECLARATION USE INLINE TYPES OR MAY USE UTILITY TYPES (BUT AVOID THIS)
+
+type FuncitonType = (age: number) => String;
+
+const addAge: FuncitonType = (age) => {
+  // return 3; # This will give error as return type is specified to string and not number
+  return `Your age is ${age}`;
+};
+
+```
+
+- TypeScript Casting
+  - Casting is the process of overriding a type.
+
+```bash
+
+1. Casting with as
+
+let x: unknown = "hello";
+console.log((x as string).length);
+
+# Casting doesn't actually change the type of the data within the variable
+let x: unknown = 1;
+console.log((x as string).length); # returns undefined (as won't change 1 into "1")
+// console.log((2 as string).length); # This will give error as it's a number directly
+
+# Force casting
+# To override type errors that TypeScript may throw when casting, first cast to unknown, then to the target type.
+console.log((2 as unknown as string).length); # convert number to unknown first (if intentional)-> STILL GIVE ERROR (JAVASCRIPT) CANNOT USE LENGTH AS IN NUMBER
+
+2. Casting with <>
+
+const x: number | string = "3";
+# below both are same
+console.log((x as string).toUpperCase());
+console.log((<string>x).toUpperCase());
+
+#  Here x is number so type conversion will give error (to solve this first convert them into unknown)
+const x: number | string = 3;
+// console.log((x as string).toUpperCase()); # Error TYPESCRIPT
+// console.log((<string>x).toUpperCase()); # Error TYPESCRIPT
+console.log((x as unknown as string).toUpperCase()); # Error JAVASCRIPT ( NO TYPESCRIPT)
+console.log((<string>(<unknown>x)).toUpperCase()); # Error JAVASCRIPT ( NO TYPESCRIPT)
+
+```
+
+- TypeScript Classes
+  - TypeScript adds types and visibility modifiers to JavaScript classes.
+
+```bash
+1. Members: Types
+
+# The members of a class (properties & methods) are typed using type annotations, similar to variables.
+class Person {
+  name: string;
+}
+const person = new Person();
+person.name = "Jane";
+
+2. Members: Visibility
+
+# There are three main visibility modifiers in TypeScript.
+    #1. public - (default) allows access to the class member from anywhere
+    #2. private - only allows access to the class member from within the class
+    #3. protected - allows access to the class member from itself and any classes that inherit it
+
+class Testing {
+  public name: string; # You need to write this to write it in construction
+  private age: number; # this can't be access outsite this class
+  public constructor(name: string, age: number) { # NO NEED TO WRITE PUBLIC AS IT'S DEFAULT
+    this.name = name;
+    this.age = age;
+  }
+  public get getInfo1() { # NO NEED TO WRITE PUBLIC AS IT'S DEFAULT
+    return `My name is ${this.name}, and my age is ${this.age}`;
+  }
+  public getInfo2() {
+    return `My name is ${this.name}, and my age is ${this.age}`;
+  }
+  private getInfo3() {
+    return `My name is ${this.name}, and my age is ${this.age}`;
+  }
+}
+const myName = new Testing("Mahesh", 28);
+// console.log(myName.age);  # age is private so can't be call here
+console.log(myName.name);
+console.log(myName.getInfo1);
+console.log(myName.getInfo2());
+// console.log(myName.getInfo3()); # getInfo3 is private so can't be called here
+
+
+# Parameter Properties
+# TypeScript provides a convenient way to define class members in the constructor, by adding a visibility modifiers to the parameter.
+
+# This line declares and initialize the properties -> This line is same as below 5 lines
+public constructor(private name: string, public age: number) {}
+
+# NO NEED TO WRITE THIS 5 LINES NOW
+    # public name: string;
+    # private age: number;
+    # public constructor(name: string, age: number) {
+    # this.name = name;
+    # this.age = age;
+
+3. Readonly
+# readonly keyword can prevent class members from being changed.
+
+class Person {
+  private readonly name: string; # This is readonly
+
+  public constructor(name: string) {
+    # name cannot be changed after this initial definition, which has to be either at it's declaration or in the constructor.
+    this.name = name;
+  }
+  public getName(): string {
+    return this.name;
+  }
+  set changeName(newName: string) {
+    // this.name = newName; # This will give error as name property is readonly
+  }
+}
+const person = new Person("Jane");
+console.log(person.getName());
+
+4. Inheritance: Implements
+# Interfaces can be used to define the type a class must follow through the implements keyword.
+
+interface GetNameType {
+  getName: () => string; # the getName method will return string. It will be in GetNameType
+  greet: () => string;
+}
+type NewGreet = { # You can use type or interface here
+  morningGreet: () => string;
+}
+
+# Use implements to add interface and use ,(comma) to add multiple interface
+class Naming implements GetNameType, NewGreet {
+  constructor(protected readonly name: string) {} # Use protected as it needed in different class
+  getName(): string { # Can skip string as it gets infer
+    return this.name;
+  }
+  greet() {
+    return `Hello!, ${this.name}`;
+  }
+  morningGreet() {
+    return `Morning, ${this.name}`;
+  }
+}
+const myName = new Naming("Mahesh");
+
+console.log(myName.getName());      # Mahesh
+console.log(myName.greet());        # Hello!, Mahesh
+console.log(myName.morningGreet()); # Morning, Mahesh
+
+5. Inheritance: Extends
+# Classes can extend each other through the extends keyword.
+# A class can only extends ONE OTHER CLASS.
+6. Override
+# When a class extends another class, it can replace the members of the parent class with the same name.
+# The override function is default (means you can change the parent function without writing the override keyword). To force it to be used when overriding, Use the setting noImplicitOverride in tsconfig(maybe)
+
+# You can avoid such types as TS can infer it
+interface GetSquare {
+  fullInfo: () => string;
+}
+
+class Square extends Naming implements GetSquare {
+  constructor(private readonly length: number, name: string) {
+    super(name); # To add property from extended class use super
+  }
+  # The getName() function has override the function(with same name) from extended Naming class
+  override getName(): string {
+    return ` Overriding the getName() function from Naming class`;
+  }
+
+  morningGreet() {
+    return `Morning, ${this.name}`;
+  }
+  get squareValue() {
+    return this.length * this.length;
+  }
+  fullInfo() {
+    return `total length is ${this.squareValue}`;
+  }
+}
+
+const myName = new Square(12, "Mahesh");
+console.log(myName.getName());
+console.log(myName.morningGreet());
+console.log(myName.squareValue);
+console.log(myName.fullInfo());
+
+7. Abstract Classes
+# Classes can be written in a way that allows them to be used as a base class for other classes without having to implement all the members. This is done by using the abstract keyword. Members that are left unimplemented also use the abstract keyword.
+
+# NOT DOING IT NOW..
+
+```
+
+###TypeScript Basic Generics
+
+- Generics in TypeScript allow you to create reusable components that work with a variety of types rather than a single type.
+
+- They provide a way to create functions, classes, and interfaces that can operate with different data types while maintaining type safety.
+
+- They enable you to write flexible and reusable code.
+
+- Generics: Allow for type-safe and reusable code components.
+- Generic Functions: Define functions that work with any type.
+- Generic Classes: Create classes that operate with various types.
+- Generic Interfaces and types: Describe objects with properties of different types.
+- Generic Constraints: Restrict generics to types with specific properties.
+
+```bash
+
+1. Generic Functions # Define functions that work with any type.
+
+function createPair<S, T>(v1: S, v2: T): [S, T] {
+  return [v1, v2];
+}
+console.log(createPair<string, number>("hello", 42));
+console.log(createPair<number, number>(2, 42));
+console.log(createPair<string, boolean>("Are you good", false));
+console.log(createPair("ok", 2)); # WORKS FINE, Type can be infer by typescript
+console.log(createPair("ok", 2, 3)); # Will give error as only 2 parameters are allowed
+console.log(createPair("ok")); # Will give error as only 2 parameters are allowed
+
+2. Generic Classes # Create classes that operate with various types.
+
+class NamedValue<T> {
+  private _value: T | undefined;
+
+  constructor(private name: string) {}
+
+  public setValue(value: T) {
+    this._value = value;
+  }
+  public getValue(): T | undefined {
+    return this._value;
+  }
+  public toString(): string {
+    return `${this.name}: ${this._value}`;
+  }
+}
+
+let value = new NamedValue<number>("myNumber");
+let value2 = new NamedValue<string>("myNumber");
+value.setValue(10);
+value2.setValue("OK");
+console.log(value.toString()); // myNumber: 10
+console.log(value2.toString()); // myNumber: OK
+
+3. Generic Interfaces and types # Describe objects with properties of different types.
+
+type ObjType<T, U> = { name: T; age: U };
+interface NewObjType<S, T> {
+  firstName: S;
+  lastName: S;
+  age: T;
+}
+
+const obj: ObjType<string, number> = { name: "Mahesh", age: 3 };
+const newObj: NewObjType<string, number> = {
+  firstName: "Mahesh",
+  lastName: "Kumar",
+  age: 28,
+};
+
+# Default Value ::
+
+# Generics can be assigned default types which apply if no other value is "specified" or "inferred".
+
+type ObjType<T = string, U = number> = { name: T; age: U };
+const obj: ObjType = { name: "Mahesh", age: 3 };
+const obj: ObjType<string, string> = { name: "Mahesh", age: "three" }; # you can change the default
+
+4. Generic Constraints(Extends)
+# Constraints can be added to generics to limit what's allowed.
+# The constraints make it possible to rely on a more specific type when using the generic type.
+
+# example 1
+function createLoggedPair<S extends string | number, T extends string | number>(
+  v1: S,
+  v2: T
+): [S, T] {
+  console.log(`creating pair: v1='${v1}', v2='${v2}'`);
+  return [v1, v2];
+}
+createLoggedPair("Hello", "Fine");
+createLoggedPair("Hello", 101);
+// createLoggedPair("Hello", true); # Error as boolean doesn't exists on type
+
+#Example 2
+# Constrain T to types that have a length property (IF HAVE x.length property)
+function logLength<T extends { length: number }>(arg: T): void {
+  console.log(arg.length);
+}
+logLength("Hello");        # Works, string has a length property
+logLength([1, 2, 3]);      # Works, array has a length property
+// logLength(42);          # Error: number doesn't have a length property
+
+# CAN ADD INTERFACE/TYPES FOR IT
+interface Lengthwise {
+  length: number;
+}
+function logLength<T extends Lengthwise>(arg: T): void {
+  console.log(arg.length);
+}
+logLength("Hello");
+```
+
+- TypeScript Utility Types
+  - TypeScript comes with a large number of types that can help with some common type manipulation, usually referred to as utility types.
+  - [Partial, Required, Record, Omit, Pick, Exclude, ReturnType, Parameters, ReadOnly]
+
+```bash
+1. Partial # It changes all the properties in an object to be optional.
+
+interface NewId {
+  one: number;
+  two: number;
+}
+const obj1: NewId = { one: 2, two: 4 };
+const obj2: Partial<NewId> = { one: 2 }; # Now all obj are optional
+
+2. Required # It changes all the properties in an object to be required.
+
+interface NewId {
+  one?: number;
+  two?: number;
+}
+const obj1: NewId = { one: 2 };
+const obj2: Required<NewId> = { one: 2, two: 4 }; # All are required/compulsory
+
+3. Record # It is a shortcut to defining an object type with a specific key type and value type.
+# Record<string, number> is equivalent to { [key: string]: number } (tuples)
+const nameAgeMap: Record<string, number> = {
+  'Alice': 21,
+  'Bob': 25
+};
+
+4. Omit # It removes keys from an object type. -> [only for object type]
+
+interface Person {
+  name: string;
+  age: number;
+  location?: string;
+}
+# age and location are removed from the type
+const bob: Omit<Person, "age" | "location"> = { name: "Bob" };
+
+5. Pick # It removes all but the specified keys from an object type.
+
+interface Person {
+  name: string;
+  age: number;
+  location?: string;
+}
+# Except age all other properties are removed
+const bob: Pick<Person, "age"> = { age: 23 };
+
+6. Exclude # It removes types from a union.
+
+type Primitive = string | number | boolean;
+const value1: Exclude<Primitive, string> = true;
+const value2: Exclude<Primitive, string> = 234;
+// const value3: Exclude<Primitive, string> = "abc"; # It will give error as string has been excluded from the union type
+
+7. ReturnType # It extracts the return type of a function type.
+
+type PointGenerator = () => { x: number; y: number };
+# It will give type of what a function will return
+const point: ReturnType<PointGenerator> = {
+  x: 10,
+  y: 20,
+};
+console.log(point);
+
+8. Parameters # It extracts the parameter types of a function type as an array.
+
+type Finding = (x: string, y: number) => number;
+type Finding2 = (p: { x: string; y: number }) => number;
+
+const value1: Parameters<Finding> = ["name", 8];
+const value2: Parameters<Finding2> = [{ x: "name", y: 8 }];
+
+# How both are different in writing a function
+const find: Finding = (x, y) => {
+  return y + x.length;
+};
+const find2: Finding2 = (p) => {
+  return p.y + p.x.length;
+};
+const find3: Finding2 = ({ x, y }) => {
+  return y + x.length;
+};
+
+console.log(find("hello", 5)); // Output: 10
+console.log(find2({ x: "hello", y: 5 })); // Output: 10
+console.log(find3({ x: "hello", y: 5 })); // Output: 10
+
+9. Readonly
+# It is used to create a new type where all properties are readonly, meaning they cannot be modified once assigned a value.
+# Keep in mind TypeScript will prevent this at compile time, but in theory since it is compiled down to JavaScript you can still override a readonly property.
+interface Person {
+  name: string;
+  age: number;
+}
+const person: Readonly<Person> = {
+  name: "Dylan",
+  age: 35,
+};
+// person.name = "Israel"; # This will give error as it's readonly
+
+```
+
+- TypeScript Keyof
+  - It is a keyword in TypeScript which is used to extract the key type from an object type.
+
+```bash
+1. keyof with explicit keys
+# It is used to create a union type of the keys of a given object type.
+
+# Example 1
+interface Person {
+  name: string;
+  age: number;
+  location: string;
+}
+type PersonKeys = keyof Person; # 'name' | 'age' | 'location'
+
+const myPerson: PersonKeys = "age"; # You can only write any one value from the three
+
+# Example 2
+interface Person {
+  name: string;
+  age: number;
+}
+# `keyof Person` means "name" | "age"
+function printPersonProperty(person: Person, property: keyof Person) {
+  console.log(`Printing person property ${property}: "${person[property]}"`);
+}
+let person = {
+  name: "Max",
+  age: 27,
+};
+printPersonProperty(person, "name"); # Can only write "name" or "age" here
+
+2. keyof with index signatures ->[NOT IMP MAY BE]
+# keyof can also be used with index signatures to extract the index type.
+
+type StringMap = { [key: string]: unknown };
+# `keyof StringMap` resolves to `string` here
+function createStringPair(property: keyof StringMap, value: string): StringMap {
+  return { [property]: value };
+}
+console.log(createStringPair(22, "OOOOKKK")); // { '22': 'OOOOKKK' }
+console.log(createStringPair("abc", "OOOOKKK")); // { '22': 'OOOOKKK' }
+// console.log(createStringPair(true, "OOOOKKK")); // Error
+
+# key must be 'string', 'number', 'symbol' and that too gets converted into string(?)
+# In JavaScript, when you use a number as an object key, it is internally converted to a string. This behavior causes TypeScript to include both string and number in the keyof type.
+```
+
+- TypeScript Null & Undefined
+  - By default null and undefined handling is disabled, and can be enabled by setting strictNullChecks to true.
+
+```bash
+# null and undefined are primitive types and can be used like other types, such as string.
+let value: string | undefined | null = null;
+value = 'hello';
+value = undefined;
+
+```
