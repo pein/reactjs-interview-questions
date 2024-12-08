@@ -3,7 +3,7 @@
 #### 1. What is the output of below code
 
 ```javascript
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function Counter() {
   const [counter, setCounter] = useState(5);
@@ -11,50 +11,59 @@ export default function Counter() {
   return (
     <>
       <span>{counter}</span>
-      <button onClick={() => {
-        setCounter(counter + 5);
-        setCounter(counter + 5);
-        alert(counter);
-        setCounter(counter + 5);
-        setCounter(counter + 5);
-      }}>Increment</button>
+      <button
+        onClick={() => {
+          setCounter(counter + 5);
+          setCounter(counter + 5);
+          alert(counter);
+          setCounter(counter + 5);
+          setCounter(counter + 5);
+        }}
+      >
+        Increment
+      </button>
     </>
-  )
+  );
 }
 ```
 
 - 1: Alert with 5, 5
 - 2: Alert with 15, 25
-- 3: Alert with 5,  10
+- 3: Alert with 5, 10
 - 4: Error: Cannot update the same state multiple times concurrently
 
 <details><summary><b>Answer</b></summary>
 <p>
 
 ##### Answer: 3
+
 State values are fixed(i.e, default value 5) in each render and setting the state only changes it for the next render. React will wait until all the code executed with in an event handler before your state updates followed by re-rendering the UI. Also, all the 3 setter function calls are replacing the calculated value. Hence, irrespective of how many times you call `setCounter(counter + 5)` the final value is 10(5+5).
 
 This can be visuallized by substituting with state variable values in the particular render,
+
 ```javascript
-      <button onClick={() => {
-        setCounter(5 + 5);
-        setCounter(5 + 5);
-        alert(5);
-        setCounter(5 + 5);
-        setCounter(5 + 5);
-      }}>Increment</button>
+<button
+  onClick={() => {
+    setCounter(5 + 5);
+    setCounter(5 + 5);
+    alert(5);
+    setCounter(5 + 5);
+    setCounter(5 + 5);
+  }}
+>
+  Increment
+</button>
 ```
+
 </p>
 </details>
 
 ---
 
-**[⬆ Back to Top](#table-of-contents)**
-
 #### 2. What is the output of below code
 
 ```javascript
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function Counter() {
   const [counter, setCounter] = useState(5);
@@ -62,15 +71,19 @@ export default function Counter() {
   return (
     <>
       <span>{counter}</span>
-      <button onClick={() => {
-        setCounter(counter => counter + 5);
-        setCounter(counter => counter + 5);
-        alert(counter);
-        setCounter(counter => counter + 5);
-        setCounter(counter => counter + 5);
-      }}>Increment</button>
+      <button
+        onClick={() => {
+          setCounter((counter) => counter + 5);
+          setCounter((counter) => counter + 5);
+          alert(counter);
+          setCounter((counter) => counter + 5);
+          setCounter((counter) => counter + 5);
+        }}
+      >
+        Increment
+      </button>
     </>
-  )
+  );
 }
 ```
 
@@ -91,12 +104,10 @@ React queues all the updater functions(e.g, counter => counter + 5) which will b
 
 ---
 
-**[⬆ Back to Top](#table-of-contents)**
-
 #### 3. What is the output of span after one click?
 
 ```javascript
-import { useRef } from 'react';
+import { useRef } from "react";
 
 export default function Counter() {
   let countRef = useRef(0);
@@ -105,13 +116,11 @@ export default function Counter() {
     countRef.current = countRef.current + 1;
   }
 
-  return 
+  return;
   <>
     <span>Count: {countRef.current}</span>
-    <button onClick={handleIncrement}>
-      Click me
-    </button>
-  </>
+    <button onClick={handleIncrement}>Click me</button>
+  </>;
 }
 ```
 
@@ -125,22 +134,22 @@ export default function Counter() {
 
 ##### Answer: 4
 
-In React, every update has two phases. 
+In React, every update has two phases.
+
 1. **Render:** This is where React calls the components in order to output something on the screen
 2. **Commit:** React applies changes to the DOM
 
 Any updates to the ref will be reflected only in the commit phase. In other words, React sets **counterRef.current** during the commit phase. Hence, **countRef.current** always holds value `0` irrespective of how many times the Increment button clicked.
+
 </p>
 </details>
 
 ---
 
-**[⬆ Back to Top](#table-of-contents)**
-
 #### 4. What is the outcome of below code after button click?
 
 ```javascript
-import { useRef } from 'react';
+import { useRef } from "react";
 
 function MyCustomInput(props) {
   return <input {...props} />;
@@ -156,9 +165,7 @@ export default function MyCustomForm() {
   return (
     <>
       <MyCustomInput ref={inputRef} />
-      <button onClick={handleInputFocus}>
-        Click Me
-      </button>
+      <button onClick={handleInputFocus}>Click Me</button>
     </>
   );
 }
@@ -173,6 +180,7 @@ export default function MyCustomForm() {
 <p>
 
 ##### Answer: 2
+
 By default, React does not allow a component access the DOM nodes of other components even for child components. If you still try to access the DOM nodes directly then you will receive below error:
 
 ```javascript
@@ -186,12 +194,10 @@ This issue can be fixed by wrapping the **<MyCustomInput />** component with `fo
 
 ---
 
-**[⬆ Back to Top](#table-of-contents)**
-
 #### 5. What is the outcome of number of clicks after 3 button clicks?
 
 ```javascript
-import { useRef } from 'react';
+import { useRef } from "react";
 
 export default function Counter() {
   let ref = useRef(0);
@@ -202,10 +208,8 @@ export default function Counter() {
 
   return (
     <>
-		<div>Clicked + {ref.current} + times</div>
-		<button onClick={handleClick}>
-			Click me!
-		</button>
+      <div>Clicked + {ref.current} + times</div>
+      <button onClick={handleClick}>Click me!</button>
     </>
   );
 }
@@ -220,10 +224,10 @@ export default function Counter() {
 <p>
 
 ##### Answer: 4
+
 If you try to use **{ref.current}** in the render method, the number won’t be updated on click. This is because **ref.current** does not trigger a re-render unlike state. This property is mainly used to read and write the values inside event handler or outside the render method.
+
 </p>
 </details>
 
 ---
-
-**[⬆ Back to Top](#table-of-contents)**
