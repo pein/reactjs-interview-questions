@@ -4931,14 +4931,14 @@ Technically it is possible to write nested function components but it is not sug
       4. If you want reduce client-side JavaScript and placing large dependencies on the server.
 
 270.  ### What are the differences between page router and app router in nextjs?
-      /******\******* ✨ Codeium Command ⭐ ******\*******/
+      /**\*\***\***\*\*** ✨ Codeium Command ⭐ **\*\***\***\*\***/
 271.  ### What are the differences between page router and app router in nextjs?
 
            Next.js provides two types of routers: page router and app router. Page router is used to navigate between pages in the application, while app router is used to navigate between different routes in the application.
 
       /**\*\*** ceca896d-12db-4eda-85b2-81bf5a6c9ada **\*\*\***/
 
-/******\******* ✨ Codeium Command ⭐ ******\*******/
+/**\*\***\***\*\*** ✨ Codeium Command ⭐ **\*\***\***\*\***/
 </br>
 /**\*\*** 9aa7abb0-ee6a-40ae-9cad-a6bcb4c7ffc6 **\*\*\***/
 
@@ -4961,7 +4961,8 @@ let firstName: string = "Dylan";
 let firstName = "Dylan";
 
 # Note: Having TypeScript "guess" the type of a value is called infer.
-# TypeScript may not always properly infer what the type of a variable may be. In such cases, it will set the type to any which disables type checking.
+# TypeScript may not always properly infer what the type of a variable may be.
+#In such cases, it will set the type to any which disables type checking.
 ```
 
 - TypeScript Simple Types
@@ -5029,13 +5030,16 @@ ourTuple = [5, false, 'Coding']; # initialize correctly
 ourTuple = [false, 'Coding God was mistaken', 5]; # wrong order will also gives error
 console.log(ourTuple[0]); # To access 1st element
 
-const ourTuple: [string, number] = ["s", 2,2,4]; # YOU CAN WRITE ANY TYPE AFTER THIS SO CREATE READONLY TUPLES --NO IT IS GIVING ERROR
+const ourTuple: [string, number] = ["s", 2,2,4];
+# YOU CAN WRITE ANY TYPE AFTER THIS
+#SO CREATE READONLY TUPLES --NO IT IS GIVING ERROR
 
 # READONLY TUPLES
 # define our readonly tuple - YOU CANNOT CHANGE IT LATER
 const ourReadonlyTuple: readonly [number, boolean, string] = [5, true, 'Coding'];
 
-# useState in react returns a tuple of the value and a setter function. It's a example of tuple : const [firstName, setFirstName] = useState('Dylan')
+# useState in react returns a tuple of the value and a setter function.
+#It's a example of tuple : const [firstName, setFirstName] = useState('Dylan')
 
 # NAMED TUPLES ::
 # you can access elements by their names, making the code more readable.
@@ -5080,7 +5084,8 @@ const obj: { [index: string]: number } = { one: 1 };
 obj.two = 2; # Works fine
 obj.three = "three"; # Gives Error
 
-# Index signatures like this one can also be expressed with utility types like Record<string, number>.
+# Index signatures like this one can also be expressed with utility types
+# like Record<string, number>.
 ```
 
 - TypeScript Enums
@@ -5282,7 +5287,8 @@ printStatusCode("404");
 function printStatusCode(code: string | number) {
   console.log(`My status code is ${code.toUpperCase()}.`);
 }
-# The above line will give error as toUpperCase() property is not for numbers:: YOU CAN SOLVE THIS BY USING "as" (CASTING) FOR PERTICULAR VARIABLE TO SPECIFY THE TYPE
+# The above line will give error as toUpperCase() property is not for numbers::
+# YOU CAN SOLVE THIS BY USING "as" (CASTING) FOR PERTICULAR VARIABLE TO SPECIFY THE TYPE
 function printStatusCode(code: string | number) {
   console.log(`My status code is ${(code as string).toUpperCase()}.`);
 }
@@ -5752,8 +5758,10 @@ console.log(find2({ x: "hello", y: 5 })); // Output: 10
 console.log(find3({ x: "hello", y: 5 })); // Output: 10
 
 9. Readonly
-# It is used to create a new type where all properties are readonly, meaning they cannot be modified once assigned a value.
-# Keep in mind TypeScript will prevent this at compile time, but in theory since it is compiled down to JavaScript you can still override a readonly property.
+# It is used to create a new type where all properties are readonly, meaning they
+# cannot be modified once assigned a value.
+# Keep in mind TypeScript will prevent this at compile time, but in theory since
+# it is compiled down to JavaScript you can still override a readonly property.
 interface Person {
   name: string;
   age: number;
@@ -5811,7 +5819,9 @@ console.log(createStringPair("abc", "OOOOKKK")); // { '22': 'OOOOKKK' }
 // console.log(createStringPair(true, "OOOOKKK")); // Error
 
 # key must be 'string', 'number', 'symbol' and that too gets converted into string(?)
-# In JavaScript, when you use a number as an object key, it is internally converted to a string. This behavior causes TypeScript to include both string and number in the keyof type.
+# In JavaScript, when you use a number as an object key, it is internally
+# converted to a string. This behavior causes TypeScript to include
+# both string and number in the keyof type.
 ```
 
 - TypeScript Null & Undefined
